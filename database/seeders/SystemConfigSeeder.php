@@ -16,7 +16,7 @@ class SystemConfigSeeder extends Seeder
      */
     public function run(): void
     {
-        $evinaBase = config('apis.evina.endpoints.base_url', 'https://www.social-sms.com/iq-dcb');
+        $evinaBase = config('apis.evina.endpoints.base_url', 'http://www.social-sms.com/iq-dcb');
         $dcbEp = config('apis.evina.endpoints', []);
         $vas = config('apis.vas_operator', []);
 

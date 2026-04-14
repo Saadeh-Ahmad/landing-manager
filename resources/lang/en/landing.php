@@ -43,5 +43,35 @@ return [
 
     // Disclaimer
     'disclaimer.text' => 'You will be charged IQD 300/day automatically. Free for 24 hours. No commitment. You can cancel your subscription at any time by sending 032 to 4089.',
+
+    // Zain IQ Duel migrated UI (register1 / home — English)
+    'zain' => [
+        'lang_ar' => 'عربي',
+        'lang_en' => 'EN',
+        'lang_ku' => 'كردي',
+        'footer_tc' => 'T&Cs',
+        'footer_privacy' => 'Privacy Policy',
+        'he' => [
+            'headline_full' => 'Beat your quiz rivals and win awesome prizes!',
+            'headline_l1' => 'Beat your quiz rivals',
+            'headline_l2' => 'and win awesome prizes!',
+            'cta' => 'GET STARTED',
+            'ribbon' => 'FREE TRIAL',
+        ],
+        'otp' => [
+            'step_title' => 'Activate your free trial in 2 easy steps',
+            'step2_title' => 'Enter your validation code',
+            'step_hint' => 'Please enter your mobile number below and we will send you a validation code via SMS',
+            'step2_hint' => 'Enter the code we sent to your phone via SMS',
+            'phone_label' => 'Enter your mobile number',
+            'price_line' => 'Free for 1 day and then IQD 240 per day (VAT incl.)',
+            'continue' => 'CONTINUE',
+            'verify' => 'VERIFY & SUBSCRIBE',
+            'login_prefix' => 'Already have an account?',
+            'login' => 'Login',
+            'fine_print' => '* Start the process to activate your FREE 3-day trial period. IQD 240 per day (VAT incl.) after free period ends. You may cancel the service any time by sending "0" to 2600 (free)',
+            'invalid_phone' => 'Please enter a valid Zain Iraq number starting with 7 (10 digits after 964).',
+        ],
+    ],
 ];
 

@@ -16,7 +16,7 @@ class LanguageController extends Controller
     public function switch(Request $request, string $locale)
     {
         // Validate locale
-        if (in_array($locale, ['ar', 'en'])) {
+        if (in_array($locale, ['ar', 'en', 'ku'], true)) {
             session(['locale' => $locale]);
             app()->setLocale($locale);
         }

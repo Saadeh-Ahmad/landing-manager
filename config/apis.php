@@ -48,17 +48,17 @@ return [
     | OTP Service Configuration
     |--------------------------------------------------------------------------
     |
-    | Configure your SMS/OTP provider here. 
+    | Configure your SMS/OTP provider here.
     | Set 'mode' to 'dummy' for testing or 'live' for production.
     |
     */
     'otp' => [
         'mode' => env('OTP_MODE', 'dummy'), // 'dummy' or 'live'
-        
+
         // OTP Settings
         'code_length' => env('OTP_CODE_LENGTH', 5),
         'expiry_minutes' => env('OTP_EXPIRY_MINUTES', 5),
-        
+
         // Live OTP Service (Production)
         'live' => [
             'provider' => env('OTP_PROVIDER', 'sms_gateway'), // Provider name
@@ -68,7 +68,7 @@ return [
             'sender_id' => env('OTP_SENDER_ID', 'MediaWorld'),
             'timeout' => env('OTP_TIMEOUT', 30), // seconds
         ],
-        
+
         // Dummy OTP Service (Testing)
         'dummy' => [
             'auto_generate' => true,
@@ -95,27 +95,27 @@ return [
             'token' => env('ZAIN_API_TOKEN', ''),
             'secret' => env('ZAIN_API_SECRET', ''),
         ],
-        
+
         // IP Whitelisting
         'ip_whitelist' => [
             'enabled' => env('ZAIN_IP_WHITELIST_ENABLED', false),
             'allowed_ips' => array_filter(explode(',', env('ZAIN_ALLOWED_IPS', ''))),
         ],
-        
+
         // Request Settings
         'request' => [
             'log_all_requests' => env('ZAIN_LOG_REQUESTS', true),
             'validate_signature' => env('ZAIN_VALIDATE_SIGNATURE', false),
             'signature_header' => env('ZAIN_SIGNATURE_HEADER', 'X-Zain-Signature'),
         ],
-        
+
         // Default Values
         'defaults' => [
             'currency' => 'IQD',
             'default_amount' => 1000, // IQD
             'operator_name' => 'Zain Iraq',
         ],
-        
+
         // Retry Logic (for outgoing notifications to Zain)
         'retry' => [
             'enabled' => env('ZAIN_RETRY_ENABLED', false),
@@ -137,7 +137,7 @@ return [
     */
     'dcb' => [
         'mode' => env('DCB_MODE', 'live'), // 'dummy' or 'live'
-        
+
         // Live DCB Service (Legacy - use database services instead)
         'live' => [
             'host' => env('DCB_HOST', 'https://services.mediaworldiq.com:456'),
@@ -147,7 +147,7 @@ return [
             'service_id' => env('DCB_SERVICE_ID', '295'),
             'shortcode' => env('DCB_SHORTCODE', '4089'),
             'timeout' => env('DCB_TIMEOUT', 30),
-            
+
             // Endpoints
             'endpoints' => [
                 'send_pincode' => '/dcb/API/VMS-DCBSubscription/actions/sendPincode',
@@ -155,7 +155,7 @@ return [
                 'unsubscribe' => '/dcb/API/VMS-DCBSubscription/actions/unsubscribe',
             ],
         ],
-        
+
         // Dummy DCB
         'dummy' => [
             'auto_confirm' => true,
@@ -174,20 +174,20 @@ return [
         'country_code' => env('APP_COUNTRY_CODE', '964'), // Iraq
         'currency' => env('APP_CURRENCY', 'IQD'),
         'operator' => env('APP_OPERATOR', 'Zain Iraq'),
-        
+
         // Phone Number Validation
         'phone' => [
             'country_code' => '964',
             'pattern' => '^7[0-9]{9}$', // Zain Iraq: 7xxxxxxxxx
             'format' => '+964 7XXXXXXXXX',
         ],
-        
+
         // Rate Limiting
         'rate_limit' => [
             'otp_requests_per_minute' => env('RATE_LIMIT_OTP', 3),
             'api_requests_per_minute' => env('RATE_LIMIT_API', 60),
         ],
-        
+
         // Global Timeouts
         'timeouts' => [
             'default' => 30,
@@ -229,7 +229,7 @@ return [
     */
     'evina' => [
         'mode' => env('EVINA_MODE', 'dummy'), // 'dummy' or 'live'
-        
+
         // Service Credentials
         'credentials' => [
             'username' => env('EVINA_USERNAME', ''),
@@ -241,17 +241,17 @@ return [
             'service_name' => env('EVINA_SERVICE_NAME', 'MediaWorldIQ'),
             'transaction_prefix' => env('EVINA_TRANSACTION_PREFIX', 'MW'),
         ],
-        
+
         // API Endpoints
         'endpoints' => [
-            'base_url' => env('EVINA_BASE_URL', 'https://www.social-sms.com/iq-dcb'),
+            'base_url' => env('EVINA_BASE_URL', 'http://www.social-sms.com/iq-dcb'),
             'send_pincode' => '/dcb/API/VMSDCBSubscription/actions/sendPincode',
             'verify_pincode' => '/dcb/API/VMS-DCBSubscription/actions/verifyPincode',
             'unsubscribe' => '/dcb/API/VMSDCBSubscription/actions/unsubscribeUser',
             'get_script' => '/dcbprotect.php',
             'he_redirect' => '/HE/v1.3/doubleclick/sub.php',
         ],
-        
+
         // Anti-Fraud Settings
         'antifraud' => [
             'enabled' => env('EVINA_ANTIFRAUD_ENABLED', true),
@@ -259,19 +259,19 @@ return [
             'type_he' => 'he',
             'cta_button_id' => 'cta_button', // CTA button DOM ID
         ],
-        
+
         // Flow Settings
         'flow' => [
             'default_flow' => env('EVINA_DEFAULT_FLOW', 'otp'), // 'otp' or 'he'
             'otp_page_type' => env('EVINA_OTP_PAGE_TYPE', 'single'), // 'single' or 'two_page'
         ],
-        
+
         // Redirect URLs
         'redirect' => [
             'success_url' => env('APP_URL', 'http://localhost:8000') . '/duel-success',
             'failure_url' => env('APP_URL', 'http://localhost:8000') . '/duel-failed',
         ],
-        
+
         // Dummy Mode Settings
         'dummy' => [
             'delay_ms' => 500,

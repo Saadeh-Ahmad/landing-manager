@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="1600px" height="1081px" viewBox="0 0 1600 1081" enable-background="new 0 0 1600 1081" xml:space="preserve">
+<title>mobile-icon</title>
+<g id="Mobile">
+	<path fill="#E5E5E5" d="M969.445,1060.717H630.561c-45.966,0-83.234-37.264-83.234-83.235V103.517
+		c0-45.969,37.268-83.234,83.234-83.234h338.884c45.965,0,83.229,37.265,83.229,83.234v873.964
+		C1052.674,1023.453,1015.41,1060.717,969.445,1060.717z"/>
+	<defs>
+		<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="547.327" y="20.283" width="505.347" height="1040.434">
+			<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+		</filter>
+	</defs>
+	<mask maskUnits="userSpaceOnUse" x="547.327" y="20.283" width="505.347" height="1040.434" id="SVGID_1_">
+		<g filter="url(#Adobe_OpacityMaskFilter)">
+			<polygon fill="#FFFFFF" points="10.632,498.421 -386.573,-567.518 1486.498,-1265.494 1883.697,-199.555 			"/>
+		</g>
+	</mask>
+	<path mask="url(#SVGID_1_)" fill="#FFFFFF" d="M969.445,1060.717H630.561c-45.966,0-83.234-37.264-83.234-83.235V103.517
+		c0-45.969,37.268-83.234,83.234-83.234h338.884c45.965,0,83.229,37.265,83.229,83.234v873.964
+		C1052.674,1023.453,1015.41,1060.717,969.445,1060.717z"/>
+	<rect x="577.053" y="121.354" fill="#325F40" width="445.894" height="802.62"/>
+	<defs>
+		<filter id="Adobe_OpacityMaskFilter_1_" filterUnits="userSpaceOnUse" x="577.053" y="121.354" width="445.894" height="802.62">
+			<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+		</filter>
+	</defs>
+	<mask maskUnits="userSpaceOnUse" x="577.053" y="121.354" width="445.894" height="802.62" id="SVGID_2_">
+		<g filter="url(#Adobe_OpacityMaskFilter_1_)">
+			<polygon fill="#FFFFFF" points="10.632,498.421 -386.573,-567.518 1486.498,-1265.494 1883.697,-199.555 			"/>
+		</g>
+	</mask>
+	<rect x="577.053" y="121.354" mask="url(#SVGID_2_)" fill="#4D875E" width="445.894" height="802.62"/>
+	<path fill="#E5E5E5" stroke="#A0A0A0" stroke-miterlimit="10" d="M751.204,992.346c0,26.949,21.848,48.798,48.799,48.798
+		c26.953,0,48.8-21.849,48.8-48.798c0-26.953-21.848-48.801-48.8-48.801C773.051,943.545,751.204,965.393,751.204,992.346z"/>
+	<path fill="#A0A0A0" d="M752.789,85.681h94.428c8.129,0,14.719-6.59,14.719-14.712V70.67c0-8.125-6.59-14.715-14.719-14.715
+		h-94.428c-8.129,0-14.718,6.589-14.718,14.715v0.299C738.071,79.092,744.66,85.681,752.789,85.681z"/>
+</g>
+</svg>
