@@ -1,128 +1,59 @@
 @extends('layouts.app')
 
-@section('title', $config['service_title'] ?? 'Premium Entertainment')
+@section('title', $config['service_title'] ?? __('landing.subscribe_now'))
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-orange-500 via-red-600 to-orange-700 relative overflow-hidden">
-    <!-- Animated background elements -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute top-20 left-10 w-32 h-32 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute bottom-20 right-10 w-40 h-40 bg-yellow-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div class="absolute top-1/2 left-1/4 w-24 h-24 bg-white/5 rounded-full blur-2xl animate-pulse delay-2000"></div>
+<div class="min-h-screen bg-slate-50 flex flex-col items-center px-4 py-10 sm:py-14">
+    <div class="fixed top-4 end-4 z-50">
+        <div class="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-sm shadow-sm">
+            <a href="{{ route('lang.switch', 'ar') }}"
+               class="rounded px-2 py-1 font-medium {{ app()->getLocale() === 'ar' ? 'bg-slate-800 text-white' : 'text-slate-600 hover:text-slate-900' }}">عربي</a>
+            <span class="text-slate-300">|</span>
+            <a href="{{ route('lang.switch', 'en') }}"
+               class="rounded px-2 py-1 font-medium {{ app()->getLocale() === 'en' ? 'bg-slate-800 text-white' : 'text-slate-600 hover:text-slate-900' }}">EN</a>
+        </div>
     </div>
 
-    <header class="bg-black/20 backdrop-blur-md border-b border-white/10 relative z-10">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <img src="{{ asset('images/3D Basketball/3D_Basketball_512x512.png') }}"
-                         alt="{{ __('landing.basketball.title') }}"
-                         class="w-10 h-10 object-contain">
-                    <div class="text-white text-xl sm:text-2xl font-bold">{{ __('landing.basketball.title') }}</div>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <!-- Language Switcher -->
-                    <div class="flex items-center space-x-2 bg-white/10 rounded-lg px-2 py-1">
-                        <a href="{{ route('lang.switch', 'ar') }}" 
-                           class="px-2 py-1 rounded text-sm font-semibold transition-colors {{ app()->getLocale() === 'ar' ? 'bg-orange-500 text-white' : 'text-white/70 hover:text-white' }}">
-                            عربي
-                        </a>
-                        <span class="text-white/50">|</span>
-                        <a href="{{ route('lang.switch', 'en') }}" 
-                           class="px-2 py-1 rounded text-sm font-semibold transition-colors {{ app()->getLocale() === 'en' ? 'bg-orange-500 text-white' : 'text-white/70 hover:text-white' }}">
-                            EN
-                        </a>
-                    </div>
-                    @if($evina_config)
-                        <div class="bg-green-500 text-white px-3 py-1.5 rounded-full inline-block font-semibold text-xs sm:text-sm">
-                            🔒 {{ __('landing.protected') }}
-                        </div>
-                    @endif
-                </div>
-            </div>
+    <div class="w-full max-w-md mt-8">
+        <div class="mb-8 text-center">
+            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ $config['service_title'] }}</h1>
+            @if($evina_config)
+                <p class="mt-2 inline-block rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-800 ring-1 ring-emerald-200">
+                    {{ __('landing.protected') }}
+                </p>
+            @endif
+            <p class="mt-4 text-sm leading-relaxed text-slate-600">
+                {{ $config['subscribe_description'] ?? __('landing.get_instant_access') }}
+            </p>
         </div>
-    </header>
 
-    <div class="container mx-auto px-6 py-8 sm:py-12 relative z-10">
-        <div class="max-w-4xl mx-auto">
-            <!-- Hero Section with Game Banner -->
-            <div class="text-center mb-6 sm:mb-8">
-                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 sm:mb-6 drop-shadow-2xl">
-                <span class="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                    {{ __('landing.basketball.hero_title') }}
-                </span>
-                </h1>
-                <div class="mb-4 sm:mb-6">
-                    <img src="{{ asset('images/3D Basketball/3DBasketball_1024x500.png') }}"
-                         alt="{{ __('landing.basketball.title') }}"
-                         class="w-full max-w-2xl mx-auto rounded-2xl shadow-2xl border-4 border-white/20">
-                </div>
-                <p class="text-xl sm:text-2xl text-white/90 mb-6 font-semibold drop-shadow-lg">
-                    {{ __('landing.basketball.hero_subtitle') }}
-                </p>
-                <p class="text-base sm:text-lg text-white/80 max-w-2xl mx-auto">
-                    {{ __('landing.basketball.hero_description') }}
-                </p>
-            </div>
+        <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm" id="subscribeSection">
+            <h2 class="text-center text-lg font-medium text-slate-900">
+                {{ $config['subscribe_title'] ?? __('landing.subscribe_now') }}
+            </h2>
 
-            <!-- Subscribe Section - Generic and Reusable -->
-            <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border-4 border-orange-400/30 mb-8 sm:mb-12" id="subscribeSection">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">{{ $config['subscribe_title'] ?? __('landing.subscribe_now') }}</h2>
-                    <p class="text-gray-600 text-sm sm:text-base">{{ $config['subscribe_description'] ?? __('landing.get_instant_access') }}</p>
-                </div>
+            <div id="alertMessage" class="mt-4 hidden rounded-lg p-3 text-sm"></div>
 
-                <div id="alertMessage" class="hidden mb-4 p-4 rounded-lg"></div>
+            <form id="subscribeForm" class="mt-6">
+                <input type="hidden" name="service_name" value="{{ $config['service_name'] }}">
+                <button type="submit"
+                        id="subscribe_btn"
+                        class="w-full rounded-lg bg-slate-900 py-3.5 text-center text-base font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2">
+                    {{ $config['subscribe_button_text'] ?? __('landing.subscribe_play_now') }}
+                </button>
+            </form>
 
-                <!-- Subscribe Button -->
-                <form id="subscribeForm">
-                    <input type="hidden" name="service_name" value="{{ $config['service_name'] }}">
+            <p class="mt-6 text-center text-xs leading-relaxed text-slate-500">
+                {{ __('landing.by_subscribing') }}
+                <a href="{{ route('terms') }}" class="text-slate-800 underline hover:text-slate-950">{{ __('landing.terms_conditions') }}</a>
+                {{ __('landing.and') }}
+                <a href="{{ route('privacy') }}" class="text-slate-800 underline hover:text-slate-950">{{ __('landing.privacy_policy') }}</a>
+            </p>
 
-                    <button type="submit"
-                            id="subscribe_btn"
-                            class="w-full bg-gradient-to-r from-orange-500 via-red-600 to-orange-600 text-white py-4 sm:py-5 rounded-xl text-lg sm:text-xl font-bold hover:shadow-2xl transform hover:scale-105 transition-all duration-200 border-2 border-orange-400/50 relative overflow-hidden group">
-                    <span class="relative z-10 flex items-center justify-center">
-                        <i class="fas {{ $config['subscribe_button_icon'] ?? 'fa-basketball-ball' }} mr-2 text-xl"></i>
-                        {{ $config['subscribe_button_text'] ?? __('landing.subscribe_play_now') }}
-                    </span>
-                        <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </button>
-                </form>
-
-                <p class="text-xs sm:text-sm text-gray-500 mt-4 sm:mt-6 text-center">
-                    {{ __('landing.by_subscribing') }} <a href="{{ route('terms') }}" class="text-orange-600 hover:text-orange-700 underline">{{ __('landing.terms_conditions') }}</a> {{ __('landing.and') }} <a href="{{ route('privacy') }}" class="text-orange-600 hover:text-orange-700 underline">{{ __('landing.privacy_policy') }}</a>
-                </p>
-                
-                <!-- Disclaimer -->
-                <hr class="my-4 sm:my-6 border-gray-300">
-                <p class="text-base sm:text-lg text-gray-700 leading-relaxed text-center">
-                    {{ __('landing.disclaimer.text') }}
-                </p>
-            </div>
-
-            <!-- Game Screenshots Gallery -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12">
-                <div class="rounded-xl overflow-hidden shadow-lg border-2 border-white/20 hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/3D Basketball/3D_Basketball_01_1280x720.png') }}"
-                         alt="{{ __('landing.game_screenshot') }} 1"
-                         class="w-full h-auto object-cover">
-                </div>
-                <div class="rounded-xl overflow-hidden shadow-lg border-2 border-white/20 hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/3D Basketball/3D_Basketball_02_1280x720.png') }}"
-                         alt="{{ __('landing.game_screenshot') }} 2"
-                         class="w-full h-auto object-cover">
-                </div>
-                <div class="rounded-xl overflow-hidden shadow-lg border-2 border-white/20 hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/3D Basketball/3D_Basketball_03_1280x720.png') }}"
-                         alt="{{ __('landing.game_screenshot') }} 3"
-                         class="w-full h-auto object-cover">
-                </div>
-                <div class="rounded-xl overflow-hidden shadow-lg border-2 border-white/20 hover:scale-105 transition-transform">
-                    <img src="{{ asset('images/3D Basketball/3D_Basketball_04_1280x720.png') }}"
-                         alt="{{ __('landing.game_screenshot') }} 4"
-                         class="w-full h-auto object-cover">
-                </div>
-            </div>
+            <hr class="my-6 border-slate-200">
+            <p class="text-center text-xs leading-relaxed text-slate-500">
+                {{ __('landing.disclaimer.text') }}
+            </p>
         </div>
     </div>
 </div>
@@ -268,11 +199,11 @@ $('#subscribeForm').on('submit', function(e) {
 // Show alert message
 function showAlert(message, type) {
     const alert = document.getElementById('alertMessage');
-    const bgColor = type === 'error' ? 'bg-red-100 text-red-700' :
-                    type === 'success' ? 'bg-green-100 text-green-700' :
-                    'bg-blue-100 text-blue-700';
+    const bgColor = type === 'error' ? 'bg-red-50 text-red-800 ring-1 ring-red-200' :
+                    type === 'success' ? 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200' :
+                    'bg-slate-50 text-slate-800 ring-1 ring-slate-200';
 
-    alert.className = `mb-4 p-4 rounded-lg ${bgColor}`;
+    alert.className = `mt-4 rounded-lg p-3 text-sm ${bgColor}`;
     alert.textContent = message;
     alert.classList.remove('hidden');
 
@@ -291,4 +222,3 @@ if (config.enableEvinaFraud) {
 }
 </script>
 @endsection
-

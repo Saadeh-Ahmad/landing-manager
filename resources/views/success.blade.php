@@ -14,6 +14,12 @@
 {{--                <p class="text-gray-600">Welcome to Media World Premium</p>--}}
             </div>
 
+            @if(!empty($alreadySubscribed))
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6 text-left">
+                <p class="text-blue-900 text-sm font-medium">{{ __('success.already_subscribed_notice') }}</p>
+            </div>
+            @endif
+
             <div class="bg-green-50 border-2 border-green-200 rounded-xl p-6 mb-6">
                 <div class="flex items-center justify-between mb-3">
                     <span class="text-gray-600">Status:</span>

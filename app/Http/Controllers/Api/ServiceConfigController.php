@@ -18,7 +18,7 @@ class ServiceConfigController extends Controller
     {
         // If no service name provided, try to determine from context
         if (!$serviceName) {
-            $serviceName = $request->input('service', 'dcb_mediaworld');
+            $serviceName = $request->input('service', 'duel-otp');
         }
 
         $service = Service::getByName($serviceName);

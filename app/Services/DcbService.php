@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Service;
 use App\Models\Subscriber;
 use App\Models\SystemConfig;
-use App\Services\SessionService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Log;
@@ -383,15 +382,18 @@ class DcbService
         }
     }
 
-    public function sendSMS(Service $service, string $msisdn, string $portalUrl): array
+    public function sendSMS(Service $service, string $msisdn, ?string $portalUrl = null): array
     {
         try {
-            // Build message with portal URL (keep URL in readable format)
             $message = trim($service->sub_message ?? '');
-            if (!empty($message)) {
-                $message .= " - $portalUrl";
-            } else {
-                $message = "$portalUrl";
+            if ($portalUrl !== null && $portalUrl !== '') {
+                $message = $message !== '' ? $message.' - '.$portalUrl : $portalUrl;
+            }
+            if ($message === '') {
+                return [
+                    'status' => 'error',
+                    'message' => 'No SMS message configured (sub_message is empty)',
+                ];
             }
             $message = bin2hex(mb_convert_encoding($message, 'UCS-2', 'auto'));
 
@@ -488,16 +490,11 @@ class DcbService
      */
     protected function buildEndpointUrl(Service $service, string $endpointKey, array $params = []): ?string
     {
-        // Map service type to endpoint group
-        $endpointGroup = $this->getEndpointGroup($service->type);
+        $endpointGroup = $service->operatorSubscriptionConfigGroup();
 
-        // Get API host from SystemConfig
-        // For Evina, use base_url; for others, use api_host
-        if ($service->type === 'evina') {
-            $apiHost = SystemConfig::get("{$endpointGroup}.base_url");
-        } else {
-            $apiHost = SystemConfig::get("{$endpointGroup}.api_host");
-        }
+        // Prefer api_host (DCB/VAS operator); fall back to base_url if only that is set
+        $apiHost = SystemConfig::get("{$endpointGroup}.api_host")
+            ?: SystemConfig::get("{$endpointGroup}.base_url");
 
         // Fetch endpoint path from SystemConfig
         $configKey = "{$endpointGroup}.{$endpointKey}";
@@ -516,23 +513,6 @@ class DcbService
         }
 
         return $url;
-    }
-
-    /**
-     * Map service type to SystemConfig endpoint group
-     *
-     * @param string $serviceType
-     * @return string
-     */
-    protected function getEndpointGroup(string $serviceType): string
-    {
-        $mapping = [
-            'dcb' => 'endpoints_dcb',
-            'evina' => 'endpoints_evina',
-            'quickfun' => 'endpoints_quickfun',
-        ];
-
-        return $mapping[$serviceType] ?? "endpoints_{$serviceType}";
     }
 
     /**
@@ -698,8 +678,8 @@ class DcbService
     /**
      * Handle the "User Already Exist" 400 response.
      *
-     * Creates/updates the subscriber, fetches a session ID, and returns the
-     * success response array. Returns null if the response data does not
+     * Creates/updates the subscriber and returns the success response array.
+     * Returns null if the response data does not
      * indicate an already-existing user.
      *
      * @param array  $responseData Decoded JSON body from the API
@@ -718,18 +698,6 @@ class DcbService
         }
 
         $this->createOrUpdateSubscriber($msisdn, $service);
-
-        $sessionService = new SessionService();
-        $sessionResult  = $sessionService->requestSessionId($msisdn, $serviceName);
-
-        if ($sessionResult['success'] ?? false) {
-            if (isset($sessionResult['sid'])) {
-                $responseData['session_id'] = $sessionResult['sid'];
-            }
-            if (isset($sessionResult['portal_url'])) {
-                $responseData['portal_url'] = $sessionResult['portal_url'];
-            }
-        }
 
         Log::info('DCB Send Pincode: user already subscribed', [
             'service' => $serviceName,

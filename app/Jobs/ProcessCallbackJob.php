@@ -6,11 +6,17 @@ use App\Models\Callback;
 use App\Models\Subscriber;
 use App\Models\Service;
 use App\Services\DcbService;
-use App\Services\SessionService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Processes carrier DCB callbacks (subscription / renewal / unsubscription).
+ *
+ * @todo CallbackController currently does not dispatch this job. When subscriber
+ *       sync from carrier callbacks or post-subscription SMS is required again,
+ *       re-enable: ProcessCallbackJob::dispatch(...) in Api\CallbackController::handle.
+ */
 class ProcessCallbackJob implements ShouldQueue
 {
     use Queueable;
@@ -188,12 +194,8 @@ class ProcessCallbackJob implements ShouldQueue
         }
 
         if ($service->is_smart) {
-            $sessionService = new SessionService();
-            $sessionResult = $sessionService->requestSessionId($normalizedMsisdn, $service->name);
-            if (isset($sessionResult['sid'])) {
-                $portalUrl = $sessionService->generateLocalPortalUrl($sessionResult['sid']);
-                $this->dcbService->sendSMS($service, $normalizedMsisdn, $portalUrl);
-            }
+            // SMS uses service sub_message only (no portal / billing gateway link).
+            $this->dcbService->sendSMS($service, $normalizedMsisdn, null);
         }
     }
 

@@ -27,7 +27,7 @@ class OtpController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function showLanding(Request $request, string $serviceName, string $landingName = 'otp.landing')
+    public function showLanding(Request $request, string $serviceName, string $landingName = 'otp.main')
     {
         // Get service configuration
         $service = Service::getByName($serviceName);

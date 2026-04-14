@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use App\Models\Subscriber;
-use App\Services\SessionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -12,7 +11,7 @@ class SuccessController extends Controller
 {
     /**
      * Handle success page with query parameters
-     * 
+     *
      * Expected query parameters:
      * - msisdn: Phone number (e.g., 964111111111)
      * - success: Success flag (1)
@@ -20,6 +19,9 @@ class SuccessController extends Controller
      * - servicename: Service display name
      * - merchantname: Merchant name
      * - additionalparameter1, additionalparameter2: Optional additional params
+     *
+     * Optional (OTP flow):
+     * - already_subscribed: When set to 1, the success view shows an “already subscribed” notice.
      */
     public function show(Request $request)
     {
@@ -27,7 +29,7 @@ class SuccessController extends Controller
         $success = $request->query('success');
         $servicename = $request->query('servicename');
         $ti = $request->query('ti');
-        
+
         // Log the success page request
         Log::info('Success page accessed', [
             'msisdn' => $msisdn,
@@ -47,9 +49,9 @@ class SuccessController extends Controller
                     $service = Service::where('display_name', $servicename)
                         ->where('is_active', true)
                         ->first();
-                    
+
                     // If not found, try by name
-                    if (!$service) {
+                    if (! $service) {
                         $service = Service::where('name', $servicename)
                             ->where('is_active', true)
                             ->first();
@@ -57,36 +59,12 @@ class SuccessController extends Controller
                 }
 
                 // If service not found, try to get default HE service (since this is HE flow)
-                if (!$service) {
-                    $service = Service::getByName('he-subscription');
+                if (! $service) {
+                    $service = Service::getByName('duel-he');
                 }
 
                 if ($service) {
-                    // Create or update subscriber
-                    $subscriber = $this->createOrUpdateSubscriber($msisdn, $service);
-
-                    // Request session ID
-                    $sessionService = new SessionService();
-                    $sessionResult = $sessionService->requestSessionId($msisdn, $service->name);
-
-                    // If session created successfully, redirect to portal
-                    if ($sessionResult['success'] ?? false) {
-                        if (isset($sessionResult['portal_url'])) {
-                            Log::info('Success page: Redirecting to portal', [
-                                'msisdn' => $msisdn,
-                                'service' => $service->name,
-                                'portal_url' => $sessionResult['portal_url'],
-                            ]);
-                            
-                            return redirect($sessionResult['portal_url']);
-                        }
-                    }
-
-                    Log::info('Success page: Session created but no portal URL', [
-                        'msisdn' => $msisdn,
-                        'service' => $service->name,
-                        'session_result' => $sessionResult,
-                    ]);
+                    $this->createOrUpdateSubscriber($msisdn, $service);
                 } else {
                     Log::warning('Success page: Service not found', [
                         'msisdn' => $msisdn,
@@ -102,8 +80,9 @@ class SuccessController extends Controller
             }
         }
 
-        // Show success page view
-        return view('success');
+        return view('success', [
+            'alreadySubscribed' => $request->boolean('already_subscribed'),
+        ]);
     }
 
     /**
@@ -113,27 +92,23 @@ class SuccessController extends Controller
     {
         // Remove any non-numeric characters
         $msisdn = preg_replace('/[^0-9]/', '', $msisdn);
-        
+
         // If it doesn't start with 964, add it
-        if (!str_starts_with($msisdn, '964')) {
-            $msisdn = '964' . $msisdn;
+        if (! str_starts_with($msisdn, '964')) {
+            $msisdn = '964'.$msisdn;
         }
-        
+
         return $msisdn;
     }
 
     /**
      * Create or update subscriber
-     *
-     * @param string $msisdn
-     * @param Service $service
-     * @return Subscriber
      */
     protected function createOrUpdateSubscriber(string $msisdn, Service $service): Subscriber
     {
         // Normalize MSISDN to ensure consistency
         $normalizedMsisdn = $this->normalizeMsisdn($msisdn);
-        
+
         $subscriber = Subscriber::firstOrCreate(
             [
                 'msisdn' => $normalizedMsisdn,
@@ -151,7 +126,7 @@ class SuccessController extends Controller
 
         // Update existing subscriber if already exists
         $wasNew = $subscriber->wasRecentlyCreated;
-        if (!$wasNew) {
+        if (! $wasNew) {
             $subscriber->update([
                 'status' => 'active',
                 'last_active_at' => now(),
@@ -168,4 +143,3 @@ class SuccessController extends Controller
         return $subscriber;
     }
 }
-

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->timestamp('last_billing_date')->nullable();
             $table->timestamp('unsubscribed_at')->nullable();
             $table->string('operator')->nullable();
-            $table->string('session_id')->nullable();
             $table->integer('expired_in')->nullable();
             $table->text('metadata')->nullable(); // JSON field for additional data
             $table->timestamps();

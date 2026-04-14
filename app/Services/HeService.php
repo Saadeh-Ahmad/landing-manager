@@ -25,8 +25,10 @@ class HeService
      */
     public function buildHeRedirectUrl(Service $service, string $ti, int $ts): string
     {
-        // Get HE redirect endpoint from system config
-        $heEndpoint = SystemConfig::get('endpoints_dcb.he_redirect', '/HE/v1.3/doubleclick/sub.php');
+        $heEndpoint = SystemConfig::get(
+            $service->heRedirectConfigKey(),
+            $service->defaultHeRedirectPath()
+        );
         $baseUrl = SystemConfig::get('endpoints_evina.base_url', config('apis.evina.endpoints.base_url', ''));
         $baseUrl = str_replace('https', 'http', $baseUrl);
 

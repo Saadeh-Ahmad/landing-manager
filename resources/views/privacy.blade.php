@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Privacy Policy - QuickFun Games</title>
+		<title>Privacy Policy — {{ config('app.name') }}</title>
 		<style>
 			* {
 				margin: 0;
@@ -144,14 +144,14 @@
 		<div class="container">
 			<div class="header">
 				<h1>Privacy Policy</h1>
-				<p>Media World Software — Quick Fun (Iraq)</p>
+				<p>Media World Software — {{ config('app.name') }} (Iraq)</p>
 			</div>
 
 			<div class="content">
 				<p>
 					This Privacy Policy explains how Media World Software ("Media World",
 					"we", "us", "our") collects, uses, and protects your personal data
-					when you use the Quick Fun service in Iraq.
+					when you use the Service in Iraq.
 				</p>
 				<p>
 					We act as a data controller for the information we process about you.
@@ -173,7 +173,7 @@
 				</p>
 
 				<h2>1. Children</h2>
-				<p>Quick Fun is not intended for children under 13 years old.</p>
+				<p>The Service is not intended for children under 13 years old.</p>
 				<p>
 					We do not knowingly collect information from children under this age.
 				</p>
@@ -243,7 +243,7 @@
 
 				<h3>Data collected by our third-party technology partner</h3>
 				<p>
-					Because the Quick Fun service operates on a third-party platform, our
+					Because the Service operates on a third-party platform, our
 					Technology Partner may also collect technical and analytics data, such
 					as:
 				</p>
@@ -263,7 +263,7 @@
 				<h2>4. Why We Collect This Information</h2>
 				<p>We use your data to:</p>
 				<ul>
-					<li>• provide and operate the Quick Fun service</li>
+					<li>• provide and operate the Service</li>
 					<li>• process subscriptions using Direct Carrier Billing (DCB)</li>
 					<li>• verify your access and maintain account security</li>
 					<li>• administer the service and improve performance</li>

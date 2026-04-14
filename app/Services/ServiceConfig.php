@@ -53,16 +53,11 @@ class ServiceConfig
             return null;
         }
 
-        // Map service type to endpoint group
+        // Map service type to endpoint group (pin/unsubscribe paths; mirrors DcbService)
         $endpointGroup = self::getEndpointGroup($service->type);
-        
-        // Get API host from SystemConfig
-        // For Evina, use base_url; for others, use api_host
-        if ($service->type === 'evina') {
-            $apiHost = SystemConfig::get("{$endpointGroup}.base_url");
-        } else {
-            $apiHost = SystemConfig::get("{$endpointGroup}.api_host");
-        }
+
+        $apiHost = SystemConfig::get("{$endpointGroup}.api_host")
+            ?: SystemConfig::get("{$endpointGroup}.base_url");
         
         // Fetch endpoint path from SystemConfig
         $configKey = "{$endpointGroup}.{$endpointKey}";
@@ -91,14 +86,11 @@ class ServiceConfig
      */
     protected static function getEndpointGroup(string $serviceType): string
     {
-        // Map service types to SystemConfig endpoint groups
-        $mapping = [
+        return match ($serviceType) {
             'dcb' => 'endpoints_dcb',
-            'evina' => 'endpoints_evina',
-            'quickfun' => 'endpoints_quickfun',
-        ];
-
-        return $mapping[$serviceType] ?? "endpoints_{$serviceType}";
+            'vas', 'evina' => 'endpoints_vas',
+            default => "endpoints_{$serviceType}",
+        };
     }
 
     /**

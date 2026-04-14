@@ -30,7 +30,7 @@ class HeController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function showLanding(Request $request, string $serviceName, string $landingName = 'he.landing', string $otpLandingName = 'landing.otp-subscription')
+    public function showLanding(Request $request, string $serviceName, string $landingName = 'he.landing', string $otpLandingName = 'landing.duel-otp')
     {
         // Set locale from session, default to Arabic
         $locale = session('locale', 'ar');
@@ -79,7 +79,10 @@ class HeController extends Controller
             $evinaServiceConfig = config('apis.evina');
             $baseUrl = \App\Models\SystemConfig::get('endpoints_evina.base_url', $evinaServiceConfig['endpoints']['base_url'] ?? '');
             $getScriptEndpoint = \App\Models\SystemConfig::get('endpoints_evina.get_script', '/dcbprotect.php');
-            $heRedirectEndpoint = \App\Models\SystemConfig::get('endpoints_dcb.he_redirect', '/HE/v1.3/doubleclick/sub.php');
+            $heRedirectEndpoint = \App\Models\SystemConfig::get(
+                $service->heRedirectConfigKey(),
+                $service->defaultHeRedirectPath()
+            );
 
             $evinaConfig = [
                 'base_url' => str_replace('https', 'http', $baseUrl),

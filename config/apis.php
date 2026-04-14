@@ -17,8 +17,8 @@ return [
     |
     | Example Usage:
     |   use App\Services\ServiceConfig;
-    |   $config = ServiceConfig::get('dcb_mediaworld');
-    |   $url = ServiceConfig::buildSendPincodeUrl('dcb_mediaworld', $msisdn);
+    |   $config = ServiceConfig::get('duel-otp');
+    |   $url = ServiceConfig::buildSendPincodeUrl('duel-otp', $msisdn);
     |
     | To add a new service, insert it into the 'services' table or use the seeder.
     |
@@ -40,7 +40,7 @@ return [
     'dynamic_services' => [
         'enabled' => env('DYNAMIC_SERVICES_ENABLED', true),
         'cache_ttl' => 3600, // Cache services for 1 hour
-        'default_service' => env('DEFAULT_SERVICE', 'dcb_mediaworld'),
+        'default_service' => env('DEFAULT_SERVICE', 'duel-otp'),
     ],
 
     /*
@@ -75,45 +75,6 @@ return [
             'default_code' => env('OTP_DEFAULT_CODE', null), // Set fixed OTP for testing
             'delay_ms' => 500, // Simulate API delay in milliseconds
             'log_otp' => env('OTP_LOG_CODES', true), // Log OTP codes in storage/logs
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Content Portal Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Configure your content portal/streaming service API here.
-    | This handles session creation and content access.
-    |
-    */
-    'content_portal' => [
-        'mode' => env('CONTENT_PORTAL_MODE', 'dummy'), // 'dummy' or 'live'
-        
-        // Session Settings
-        'session_expiry' => env('CONTENT_SESSION_EXPIRY', 86400), // 24 hours in seconds
-        
-        // Live Content Portal (Production)
-        'live' => [
-            'api_url' => env('CONTENT_PORTAL_API_URL', 'https://portal.mediaworld.com/api'),
-            'api_key' => env('CONTENT_PORTAL_API_KEY', ''),
-            'api_secret' => env('CONTENT_PORTAL_API_SECRET', ''),
-            'timeout' => env('CONTENT_PORTAL_TIMEOUT', 30),
-            
-            // Endpoints
-            'endpoints' => [
-                'create_session' => '/session/create',
-                'validate_session' => '/session/validate',
-                'refresh_session' => '/session/refresh',
-                'terminate_session' => '/session/terminate',
-            ],
-        ],
-        
-        // Dummy Content Portal (Testing)
-        'dummy' => [
-            'session_id_length' => 32,
-            'delay_ms' => 700, // Simulate API delay
-            'auto_success' => true,
         ],
     ],
 
@@ -169,7 +130,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | DEPRECATED: Use dynamic services from database instead.
-    | See ServiceConfig::get('dcb_mediaworld') for new approach.
+    | See ServiceConfig::get('duel-otp') for new approach.
     |
     | This configuration is kept for backward compatibility.
     |
@@ -231,7 +192,6 @@ return [
         'timeouts' => [
             'default' => 30,
             'otp' => 30,
-            'content_portal' => 30,
             'zain_webhook' => 60,
         ],
     ],
@@ -308,8 +268,8 @@ return [
         
         // Redirect URLs
         'redirect' => [
-            'success_url' => env('APP_URL', 'http://localhost:8000') . '/evina/success',
-            'failure_url' => env('APP_URL', 'http://localhost:8000') . '/evina/failure',
+            'success_url' => env('APP_URL', 'http://localhost:8000') . '/duel-success',
+            'failure_url' => env('APP_URL', 'http://localhost:8000') . '/duel-failed',
         ],
         
         // Dummy Mode Settings
@@ -318,6 +278,24 @@ return [
             'default_pincode' => '1234',
             'auto_success' => true,
         ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | VAS operator (VMS Subscription API + one-click HE, Evina)
+    |--------------------------------------------------------------------------
+    |
+    | Paths from "VAS-SubscriptionAPI - Evina v2.pdf" and
+    | "VAS One Click Header Enrichment Integration -Evina 1.pdf".
+    | Override host via VAS_API_HOST (falls back to DCB_API_HOST then Evina base_url).
+    |
+    */
+    'vas_operator' => [
+        'api_host' => env('VAS_API_HOST', env('DCB_API_HOST', '')),
+        'send_pincode' => '/vms/API/VMS-Subscription/actions/sendPincode',
+        'verify_pincode' => '/vms/API/VMS-Subscription/actions/verifyPincode',
+        'unsubscribe' => '/vms/API/VMS-Subscription/actions/unsubscribeUser',
+        'he_redirect' => '/HE/v1.3/oneclick/sub.php',
     ],
 
     /*

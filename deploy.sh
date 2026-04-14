@@ -63,7 +63,7 @@ chown -R www-data:www-data storage bootstrap/cache || echo "Permission change sk
 # Step 9: Restart queue workers (if using supervisor)
 if command -v supervisorctl &> /dev/null; then
     echo -e "${YELLOW}Step 9: Restarting queue workers...${NC}"
-    supervisorctl restart quickfun-worker:* || echo "Supervisor restart skipped"
+    supervisorctl restart landing-worker:* || echo "Supervisor restart skipped"
 else
     echo -e "${YELLOW}Step 9: Supervisor not found, skipping queue restart...${NC}"
     echo -e "${YELLOW}   Remember to restart queue workers manually: php artisan queue:restart${NC}"
@@ -83,7 +83,7 @@ echo -e "${GREEN}Deployment Completed Successfully!${NC}"
 echo -e "${GREEN}========================================${NC}"
 echo ""
 echo -e "${YELLOW}Next Steps:${NC}"
-echo -e "1. Check application: ${GREEN}http://quickfun.local${NC}"
+echo -e "1. Check application: ${GREEN}http://landing.local${NC}"
 echo -e "2. Monitor logs: ${GREEN}tail -f storage/logs/laravel.log${NC}"
 echo -e "3. Run queue worker: ${GREEN}php artisan queue:work${NC}"
 echo ""

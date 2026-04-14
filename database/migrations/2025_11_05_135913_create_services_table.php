@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique(); // Service name/identifier
-            $table->string('type')->default('dcb'); // dcb, evina, otp, etc.
+            $table->string('type')->default('vas'); // vas, dcb, evina, otp, etc.
             $table->string('merchant_name', 100)->nullable()->default('MediaWorld');
             $table->string('display_name'); // Display name for UI
             $table->text('description')->nullable();

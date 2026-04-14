@@ -120,11 +120,43 @@ class Service extends Model
     {
         $mapping = [
             'dcb' => 'endpoints_dcb',
+            'vas' => 'endpoints_vas',
             'evina' => 'endpoints_evina',
-            'quickfun' => 'endpoints_quickfun',
         ];
 
         return $mapping[$serviceType] ?? "endpoints_{$serviceType}";
+    }
+
+    /**
+     * system_configs group for PIN subscribe / verify / unsubscribe (DCB vs VAS VMS API).
+     */
+    public function operatorSubscriptionConfigGroup(): string
+    {
+        return match ($this->type) {
+            'vas', 'evina' => 'endpoints_vas',
+            'dcb' => 'endpoints_dcb',
+            default => 'endpoints_dcb',
+        };
+    }
+
+    /**
+     * system_configs key for HE redirect path (relative to Evina base_url).
+     * VAS uses one-click HE; legacy DCB uses double-click HE.
+     */
+    public function heRedirectConfigKey(): string
+    {
+        return match ($this->type) {
+            'vas', 'evina' => 'endpoints_vas.he_redirect',
+            default => 'endpoints_dcb.he_redirect',
+        };
+    }
+
+    public function defaultHeRedirectPath(): string
+    {
+        return match ($this->type) {
+            'vas', 'evina' => config('apis.vas_operator.he_redirect', '/HE/v1.3/oneclick/sub.php'),
+            default => config('apis.evina.endpoints.he_redirect', '/HE/v1.3/doubleclick/sub.php'),
+        };
     }
 
     /**

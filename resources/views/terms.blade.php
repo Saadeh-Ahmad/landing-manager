@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Terms & Conditions - QuickFun Games</title>
+		<title>Terms & Conditions — {{ config('app.name') }}</title>
 		<style>
 			* {
 				margin: 0;
@@ -136,7 +136,7 @@
 		<div class="container">
 			<div class="header">
 				<h1>Terms & Conditions</h1>
-				<p>Media World Software – Quick Fun (Iraq)</p>
+				<p>Media World Software — {{ config('app.name') }} (Iraq)</p>
 			</div>
 
 			<div class="content">
@@ -144,23 +144,23 @@
 				<p>
 					<strong>"Media World", "we", "us", "our"</strong><br />
 					means Media World Software, a company incorporated under the laws of
-					the Hashemite Kingdom of Jordan (Reg. No. 2177), operating the Quick
-					Fun service in Iraq.
+					the Hashemite Kingdom of Jordan (Reg. No. 2177), operating the Service
+					in Iraq.
 				</p>
 				<p>
 					<strong>"Technology Partner"</strong><br />
 					means Perpetuum Media Sverige AB, the third-party platform provider
-					engaged by Media World to operate and deliver the Quick Fun service.
+					engaged by Media World to operate and deliver the Service.
 				</p>
 				<p>
 					<strong>"Service"</strong><br />
-					means the Quick Fun gaming subscription service, including all
-					portals, pages, games, features, and content accessible via
-					iq.quickfun.games or any successor URL.
+					means Media World's mobile subscription and related digital services,
+					including all portals, pages, and features accessible via
+					{{ rtrim(config('app.url'), '/') }} or any successor URL.
 				</p>
 				<p>
 					<strong>"Content"</strong><br />
-					means the HTML5 games, metadata, graphics, text, and related materials
+					means the digital content, metadata, graphics, text, and related materials
 					accessible through the Service.
 				</p>
 				<p>
@@ -373,9 +373,9 @@
 					><br />
 					Website:
 					<a
-						href="https://iq.quickfun.games"
+						href="{{ rtrim(config('app.url'), '/') }}"
 						style="color: #667eea; text-decoration: underline"
-						>https://iq.quickfun.games</a
+						>{{ rtrim(config('app.url'), '/') }}</a
 					>
 				</p>
 			</div>

@@ -22,12 +22,12 @@ class FailedController extends Controller
         $reason = $request->get('reason') ?? $request->get('error') ?? $request->get('error_reason');
         
         if ($reason && strtolower($reason) === 'nohe') {
-            $otpRouteName = $request->get('otp_landing', 'landing.otp-subscription');
-            
+            $otpRouteName = $request->get('otp_landing', 'landing.duel-otp');
+
             return redirect()->route(
                 Route::has($otpRouteName)
                     ? $otpRouteName
-                    : 'landing.otp-subscription'
+                    : 'landing.duel-otp'
             );
         }
         

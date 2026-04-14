@@ -3,31 +3,34 @@
 @section('title', $config['service_title'] ?? __('landing.otp.enter_phone_number'))
 
 @section('content')
-<div class="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-12 relative">
-    <div class="language-switcher fixed top-4 right-4 z-50">
-        <div class="flex items-center gap-2 bg-white rounded-lg shadow px-3 py-2 border border-gray-200">
-            <a href="{{ route('lang.switch', 'ar') }}" class="px-2 py-1 rounded text-sm font-semibold {{ app()->getLocale() === 'ar' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:text-blue-600' }}">عربي</a>
-            <span class="text-gray-400">|</span>
-            <a href="{{ route('lang.switch', 'en') }}" class="px-2 py-1 rounded text-sm font-semibold {{ app()->getLocale() === 'en' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:text-blue-600' }}">EN</a>
+<div class="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-10 sm:py-14">
+    <div class="fixed top-4 end-4 z-50">
+        <div class="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-sm shadow-sm">
+            <a href="{{ route('lang.switch', 'ar') }}"
+               class="rounded px-2 py-1 font-medium {{ app()->getLocale() === 'ar' ? 'bg-slate-800 text-white' : 'text-slate-600 hover:text-slate-900' }}">عربي</a>
+            <span class="text-slate-300">|</span>
+            <a href="{{ route('lang.switch', 'en') }}"
+               class="rounded px-2 py-1 font-medium {{ app()->getLocale() === 'en' ? 'bg-slate-800 text-white' : 'text-slate-600 hover:text-slate-900' }}">EN</a>
         </div>
     </div>
 
-    <!-- Phone Section -->
-    <div id="phoneSection" class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-gray-200">
-        <div class="px-8 py-8">
-            <h1 class="text-2xl font-bold text-gray-800 mb-2 text-left">
-                {{ __('landing.otp.get_started') }}
-            </h1>
+    <div class="w-full max-w-md">
+        <div class="mb-6 text-center">
+            <h1 class="text-xl font-semibold tracking-tight text-slate-900">{{ $config['service_title'] }}</h1>
+            <p class="mt-2 text-sm text-slate-600">{{ __('landing.otp.get_started') }}</p>
+        </div>
 
-            <div id="alertMessage" class="hidden mb-4 p-4 rounded-lg text-sm"></div>
+        <!-- Phone Section -->
+        <div id="phoneSection" class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div id="alertMessage" class="hidden mb-4 rounded-lg p-3 text-sm"></div>
 
-            <form id="phoneForm" class="space-y-6">
+            <form id="phoneForm" class="space-y-5">
                 <div>
-                    <label for="msisdn" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="msisdn" class="mb-1.5 block text-sm font-medium text-slate-700">
                         {{ __('landing.otp.enter_phone_number') }}
                     </label>
-                    <div class="phone-input-container flex rounded-xl border-2 border-orange-400 focus-within:ring-2 focus-within:ring-orange-500/20 focus-within:border-orange-500 overflow-hidden bg-white">
-                        <span class="country-code inline-flex items-center px-4 bg-gray-50 border-r-2 border-orange-400 text-gray-700 font-semibold text-base">964</span>
+                    <div class="flex overflow-hidden rounded-lg border border-slate-300 bg-white focus-within:border-slate-500 focus-within:ring-1 focus-within:ring-slate-500">
+                        <span class="inline-flex items-center border-e border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-600">964</span>
                         <input type="tel"
                                id="msisdn"
                                name="msisdn"
@@ -36,40 +39,32 @@
                                pattern="7[0-9]{9}"
                                maxlength="10"
                                inputmode="numeric"
-                               class="flex-1 px-4 py-3.5 text-base border-0 focus:outline-none focus:ring-0 bg-white text-gray-800 placeholder-gray-400">
+                               class="min-w-0 flex-1 border-0 bg-transparent px-3 py-2.5 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-0">
                     </div>
                 </div>
 
                 <button type="submit"
                         id="sendOtpBtn"
-                        class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-full text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2">
+                        class="w-full rounded-lg bg-slate-900 py-3 text-center text-base font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2">
                     {{ __('landing.otp.confirm') }}
                 </button>
             </form>
 
-            <hr class="my-6 border-gray-200">
-            <p class="text-xs text-gray-400 text-center leading-relaxed">
+            <p class="mt-6 text-center text-xs leading-relaxed text-slate-500">
                 {{ __('landing.disclaimer.text') }}
             </p>
         </div>
-    </div>
 
-    <!-- OTP Section -->
-    <div id="otpSection" class="hidden bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-gray-200">
-        <div class="px-8 py-8">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-                    <i class="fas fa-sms text-orange-500 text-lg"></i>
-                </div>
-                <h1 class="text-2xl font-bold text-gray-800">{{ __('landing.otp.enter_otp_code') }}</h1>
-            </div>
-            <p class="text-gray-500 text-sm mb-6">{{ __('landing.otp.code_sent_message') }}</p>
+        <!-- OTP Section -->
+        <div id="otpSection" class="mt-6 hidden rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 class="text-lg font-medium text-slate-900">{{ __('landing.otp.enter_otp_code') }}</h2>
+            <p class="mt-1 text-sm text-slate-600">{{ __('landing.otp.code_sent_message') }}</p>
 
-            <div id="otpAlertMessage" class="hidden mb-4 p-4 rounded-lg text-sm"></div>
+            <div id="otpAlertMessage" class="mt-4 hidden rounded-lg p-3 text-sm"></div>
 
-            <form id="otpForm" class="space-y-6">
+            <form id="otpForm" class="mt-5 space-y-5">
                 <div>
-                    <label for="pincode" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="pincode" class="mb-1.5 block text-sm font-medium text-slate-700">
                         {{ __('landing.otp.enter_code_sent') }}
                     </label>
                     <input type="text"
@@ -79,26 +74,25 @@
                            required
                            maxlength="{{ $config['pin_length'] }}"
                            inputmode="numeric"
-                           class="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 text-2xl text-center tracking-widest font-bold text-gray-800">
-                    <p class="text-xs text-gray-400 mt-2 text-center">
+                           class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-center text-xl font-semibold tracking-widest text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500">
+                    <p class="mt-2 text-center text-xs text-slate-500">
                         {{ str_replace(':length', $config['pin_length'], __('landing.otp.check_sms')) }}
                     </p>
                 </div>
 
                 <button type="submit"
                         id="verifyOtpBtn"
-                        class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-full text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2">
+                        class="w-full rounded-lg bg-slate-900 py-3 text-center text-base font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2">
                     {{ __('landing.otp.verify') }} &amp; {{ __('landing.subscribe_now') }}
                 </button>
             </form>
 
-            <button onclick="backToPhone()" class="mt-4 w-full text-center text-sm text-orange-500 hover:text-orange-600 font-semibold transition-colors">
-                <i class="fas fa-arrow-left mr-1"></i>{{ __('landing.otp.back_to_phone') }}
+            <button type="button" onclick="backToPhone()" class="mt-4 w-full text-center text-sm font-medium text-slate-600 hover:text-slate-900">
+                {{ __('landing.otp.back_to_phone') }}
             </button>
         </div>
     </div>
 
-    <!-- Placeholder to keep backToPhone() JS happy (no visual game preview in this design) -->
     <div id="gamePreview" class="hidden"></div>
 </div>
 
@@ -235,17 +229,9 @@ document.getElementById('phoneForm').addEventListener('submit', async function(e
         console.log('DCB Send PIN Response:', data);
 
         if (data.success) {
-            // Check if user is already subscribed
-            if (data.already_subscribed || (data.data && data.data.portal_url)) {
-                const portalUrl = data.data?.portal_url;
-
-                if (portalUrl) {
-                    console.log('Redirecting to portal:', portalUrl);
-                    window.location.href = portalUrl;
-                } else {
-                    console.error('No portal URL found in response:', data);
-                    window.location.href = '/success';
-                }
+            if (data.already_subscribed) {
+                window.location.href = @json(route('duel.success', ['already_subscribed' => true]));
+                return;
             } else {
                 showAlert('OTP sent successfully! Check your SMS', 'success');
                 setTimeout(() => {
@@ -304,18 +290,9 @@ document.getElementById('otpForm').addEventListener('submit', async function(e) 
         console.log('DCB Verify Response:', data);
 
         if (data.success) {
-            showOtpAlert('Subscription activated successfully! Redirecting to content...', 'success');
+            showOtpAlert('Subscription activated successfully! Redirecting...', 'success');
             setTimeout(() => {
-                const portalUrl = data.data?.portal_url || data.portal_url;
-                console.log('Portal URL:', portalUrl);
-
-                if (portalUrl) {
-                    console.log('Redirecting to portal:', portalUrl);
-                    window.location.href = portalUrl;
-                } else {
-                    console.error('No portal URL found in response:', data);
-                    window.location.href = '/success';
-                }
+                window.location.href = @json(route('duel.success'));
             }, 1500);
         } else {
             showOtpAlert(data.message || 'Invalid code. Please try again.', 'error');
@@ -335,7 +312,7 @@ document.getElementById('otpForm').addEventListener('submit', async function(e) 
 // Show alert message
 function showAlert(message, type) {
     const alert = document.getElementById('alertMessage');
-    alert.className = `mb-4 p-4 rounded-lg text-sm ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+    alert.className = `mb-4 rounded-lg p-3 text-sm ${type === 'error' ? 'bg-red-50 text-red-800 ring-1 ring-red-200' : 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200'}`;
     alert.textContent = message;
     alert.classList.remove('hidden');
 
@@ -346,7 +323,7 @@ function showAlert(message, type) {
 
 function showOtpAlert(message, type) {
     const alert = document.getElementById('otpAlertMessage');
-    alert.className = `mb-4 p-4 rounded-lg text-sm ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+    alert.className = `rounded-lg p-3 text-sm ${type === 'error' ? 'bg-red-50 text-red-800 ring-1 ring-red-200' : 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200'}`;
     alert.textContent = message;
     alert.classList.remove('hidden');
 

@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>FAQ - QuickFun Games</title>
+		<title>FAQ — {{ config('app.name') }}</title>
 		<style>
 			* {
 				margin: 0;
@@ -143,44 +143,31 @@
 	<body>
 		<div class="container">
 			<div class="header">
-				<h1>QuickFun FAQ</h1>
+				<h1>FAQ</h1>
 				<p>Frequently Asked Questions</p>
 			</div>
 
 			<div class="content">
 				<div class="faq-item">
-					<div class="faq-question">What is QuickFun?</div>
+					<div class="faq-question">What is {{ config('app.name') }}?</div>
 					<div class="faq-answer">
-						QuickFun is a place where you can find great games that have been carefully picked by other people playing games. No install needed, just play them in your browser.
+						{{ config('app.name') }} is a mobile subscription service delivered through your operator. You can subscribe or verify your number using the flows shown on our landing pages (for example OTP or header enrichment, depending on the offer).
 					</div>
 				</div>
 
 				<div class="faq-item">
-					<div class="faq-question">Is QuickFun free?</div>
+					<div class="faq-question">How much does it cost?</div>
 					<div class="faq-answer">
-						QuickFun is free of ads and In-application purchases so you can focus on discovering and playing great and fun games. To play QuickFun games you need to subscribe, cost depending on your operator and country.
+						Pricing depends on your operator and the active offer. You will see the price and billing terms before you confirm a subscription. For details, see our terms and conditions.
 					</div>
 				</div>
-
-{{--				<div class="faq-item">--}}
-{{--					<div class="faq-question">How can I unsubscribe from QuickFun?</div>--}}
-{{--					<div class="faq-answer">--}}
-{{--						<div style="margin: 10px 0;">--}}
-{{--							<a href="javascript:void(0)" class="unsubscribe-link">Click here to unsubscribe</a>--}}
-{{--						</div>--}}
-{{--						<p>--}}
-{{--							Alternatively, you can unsubscribe by sending STOP to your operator's shortcode or through your operator's customer care portal. For assistance please send an email to--}}
-{{--							<a href="mailto:info@mediaworldiq.com?subject=QuickFun Support [IQ] - Unsubscribe Request" class="email-link">info@mediaworldiq.com</a>.--}}
-{{--						</p>--}}
-{{--					</div>--}}
-{{--				</div>--}}
 
 				<div class="faq-item">
 					<div class="faq-question">It's not working :-(</div>
 					<div class="faq-answer">
 						<p>
 							Sorry to hear that, write us on
-							<a href="mailto:info@mediaworldiq.com?subject=QuickFun Support [IQ] - Technical Issue" class="email-link">info@mediaworldiq.com</a>.
+							<a href="mailto:info@mediaworldiq.com?subject={{ rawurlencode(config('app.name').' Support [IQ] - Technical Issue') }}" class="email-link">info@mediaworldiq.com</a>.
 							We like to understand what phone you are using, what browser (if you know) and what country and operator you have + that you describe what the issue is. The more info you provide, the better we can help you!
 						</p>
 					</div>
@@ -206,7 +193,7 @@
 					}
 				}
 
-				if (confirm('Are you sure you want to unsubscribe from QuickFun?')) {
+				if (confirm('Are you sure you want to unsubscribe from this service?')) {
 					// Call unsubscribe API
 					fetch('/api/dcb/unsubscribe', {
 						method: 'POST',
@@ -216,13 +203,13 @@
 						},
 						body: JSON.stringify({
 							msisdn: msisdn,
-							service: 'dcb_mediaworld' // Default service, can be made dynamic
+							service: 'duel-otp' // Default service, can be made dynamic
 						})
 					})
 					.then(response => response.json())
 					.then(data => {
 						if (data.success) {
-							alert('You have been successfully unsubscribed from QuickFun.');
+							alert('You have been successfully unsubscribed.');
 						} else {
 							alert('Unsubscribe failed: ' + (data.message || 'Please contact support at info@mediaworldiq.com'));
 						}

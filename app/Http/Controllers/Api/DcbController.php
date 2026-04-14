@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\DcbService;
 use App\Services\ServiceConfig;
-use App\Services\SessionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -41,7 +40,7 @@ class DcbController extends Controller
         }
 
         $msisdn = $request->input('msisdn');
-        $serviceName = $request->input('service', 'dcb_mediaworld');
+        $serviceName = $request->input('service', 'duel-otp');
 
         // Check if service exists and is active
         if (!ServiceConfig::isActive($serviceName)) {
@@ -62,7 +61,6 @@ class DcbController extends Controller
                 'service' => $serviceName,
             ];
 
-            // If user already subscribed, include session info
             if (isset($result['already_subscribed']) && $result['already_subscribed']) {
                 $responseData['already_subscribed'] = true;
             }
@@ -102,7 +100,7 @@ class DcbController extends Controller
 
         $msisdn = $request->input('msisdn');
         $pincode = $request->input('pincode');
-        $serviceName = $request->input('service', 'dcb_mediaworld');
+        $serviceName = $request->input('service', 'duel-otp');
         $ti = $request->input('ti') ?? null;
         $ts = $request->input('ts') ?? null;
 
@@ -123,25 +121,10 @@ class DcbController extends Controller
         $result = $this->dcbService->verifyPincode(...$args);
 
         if ($result['verified']) {
-            // Request session ID after successful verification
-            $sessionService = new SessionService();
-            $sessionResult = $sessionService->requestSessionId($msisdn, $serviceName);
-
-            // Add session_id and portal_url to response data
-            $responseData = $result['data'] ?? [];
-            if ($sessionResult['success'] ?? false) {
-                if (isset($sessionResult['sid'])) {
-                    $responseData['session_id'] = $sessionResult['sid'];
-                }
-                if (isset($sessionResult['portal_url'])) {
-                    $responseData['portal_url'] = $sessionResult['portal_url'];
-                }
-            }
-
             return response()->json([
                 'success' => true,
                 'message' => $result['message'] ?? 'PIN code verified successfully',
-                'data' => $responseData,
+                'data' => $result['data'] ?? [],
                 'service' => $serviceName,
             ]);
         }
@@ -176,7 +159,7 @@ class DcbController extends Controller
         }
 
         $msisdn = $request->input('msisdn');
-        $serviceName = $request->input('service', 'dcb_mediaworld');
+        $serviceName = $request->input('service', 'duel-otp');
 
         // Check if service exists and is active
         if (!ServiceConfig::isActive($serviceName)) {
@@ -212,7 +195,7 @@ class DcbController extends Controller
     public function getServices()
     {
         try {
-            $services = ServiceConfig::getAllActive('dcb');
+            $services = ServiceConfig::getAllActive()->whereIn('type', ['dcb', 'vas'])->values();
 
             $servicesData = $services->map(function ($service) {
                 return [

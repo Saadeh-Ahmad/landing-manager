@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Callback;
-use App\Jobs\ProcessCallbackJob;
 use App\Services\DcbService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -62,8 +61,14 @@ class CallbackController extends Controller
             'service_id' => $callback->service_id,
         ]);
 
-        // Dispatch job to process callback
-        ProcessCallbackJob::dispatch($callback->id, $this->dcbService);
+        /**
+         * @todo Re-enable background processing when carrier callbacks must update subscribers
+         *       or send post-subscription SMS again. Example:
+         *       ProcessCallbackJob::dispatch($callback->id, $this->dcbService);
+         */
+        Log::notice('Callback stored; ProcessCallbackJob dispatch is intentionally disabled.', [
+            'callback_id' => $callback->id,
+        ]);
 
         return response()->json([
             'status' => 'success',

@@ -19,7 +19,6 @@ class Subscriber extends Model
         'last_billing_date',
         'unsubscribed_at',
         'operator',
-        'session_id',
         'expired_in',
         'metadata',
     ];

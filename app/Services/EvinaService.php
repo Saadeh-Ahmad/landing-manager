@@ -27,7 +27,10 @@ class EvinaService
         $this->endpoints = [
             'base_url' => $this->baseUrl,
             'get_script' => \App\Models\SystemConfig::get('endpoints_evina.get_script', '/dcbprotect.php'),
-            'he_redirect' => \App\Models\SystemConfig::get('endpoints_dcb.he_redirect', '/HE/v1.3/doubleclick/sub.php'),
+            'he_redirect' => \App\Models\SystemConfig::get(
+                'endpoints_vas.he_redirect',
+                \App\Models\SystemConfig::get('endpoints_dcb.he_redirect', config('apis.evina.endpoints.he_redirect', '/HE/v1.3/doubleclick/sub.php'))
+            ),
         ];
     }
 
