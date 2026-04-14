@@ -195,7 +195,7 @@
 
 				if (confirm('Are you sure you want to unsubscribe from this service?')) {
 					// Call unsubscribe API
-					fetch('/api/dcb/unsubscribe', {
+					fetch(@json(route('api.dcb.unsubscribe')), {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',

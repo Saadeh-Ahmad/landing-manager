@@ -37,6 +37,8 @@ return [
     'otp.code_sent_message' => 'أرسلنا رمزًا إلى هاتفك',
     'otp.check_sms' => 'تحقق من رسائلك النصية للحصول على الرمز المكون من :length أرقام',
     'otp.confirm' => 'تأكيد',
+    'otp.network_error' => 'خطأ في الشبكة. تحقق من الاتصال وحاول مرة أخرى.',
+    'otp.request_failed' => 'أرجع الخادم خطأ',
 
     // Subscriber Login (existing subscribers) Page
     'subscriber_login.login' => 'دخول',

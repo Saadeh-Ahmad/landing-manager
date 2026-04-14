@@ -37,6 +37,8 @@ return [
     'otp.code_sent_message' => 'We sent a code to your phone',
     'otp.check_sms' => 'Check your SMS for the :length-digit code',
     'otp.confirm' => 'Confirm',
+    'otp.network_error' => 'Network error. Check your connection and try again.',
+    'otp.request_failed' => 'Server returned an error',
 
     // Subscriber Login (existing subscribers) Page
     'subscriber_login.login' => 'Login',

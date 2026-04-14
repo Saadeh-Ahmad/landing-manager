@@ -70,10 +70,12 @@ class DcbService
             ]);
 
             // Make API request
+            // 4th arg false: do not throw on 4xx/5xx after retries (return Response so we can map errors for the OTP UI)
             $response = Http::retry(
                 3,
                 1000,
-                fn ($e) => $e instanceof ConnectionException || $e->getCode() === 56
+                fn ($e) => $e instanceof ConnectionException || $e->getCode() === 56,
+                false
             )
                 ->timeout($service->timeout ?? 30)
                 ->withOptions([
@@ -110,15 +112,20 @@ class DcbService
                 }
             }
 
+            $code = $response->status();
+            $hint = $code === 404
+                ? ' Operator URL not found (404): verify `endpoints_dcb.api_host` and `endpoints_dcb.send_pincode` in system configuration.'
+                : '';
+
             return [
                 'status' => 'error',
-                'message' => 'Failed to send PIN code',
+                'message' => 'Failed to send PIN code (HTTP '.$code.').'.$hint,
                 'error' => $response->body(),
-                'status_code' => $response->status(),
+                'status_code' => $code,
             ];
 
         } catch (\Exception $e) {
-            // Laravel's retry() throws RequestException for 4xx/5xx — handle 400 "User Already Exist" here
+            // Handle 400 "User Already Exist" if thrown by the HTTP client layer
             if ($e instanceof \Illuminate\Http\Client\RequestException && $e->response->status() === 400) {
                 $service = Service::getByName($serviceName);
                 if ($service) {
@@ -210,7 +217,8 @@ class DcbService
             $response = Http::retry(
                 3,
                 1000,
-                fn ($e) => $e instanceof ConnectionException || $e->getCode() === 56
+                fn ($e) => $e instanceof ConnectionException || $e->getCode() === 56,
+                false
             )
                 ->timeout($service->timeout ?? 30)
                 ->withOptions([
@@ -332,7 +340,8 @@ class DcbService
             $response = Http::retry(
                 3,
                 1000,
-                fn ($e) => $e instanceof ConnectionException || $e->getCode() === 56
+                fn ($e) => $e instanceof ConnectionException || $e->getCode() === 56,
+                false
             )
                 ->timeout($service->timeout ?? 30)
                 ->withOptions([
@@ -429,7 +438,8 @@ class DcbService
             $response = Http::retry(
                 3,
                 1000,
-                fn ($e) => $e instanceof ConnectionException || $e->getCode() === 56
+                fn ($e) => $e instanceof ConnectionException || $e->getCode() === 56,
+                false
             )
                 ->timeout($service->timeout ?? 30)
                 ->withOptions([

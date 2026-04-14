@@ -364,10 +364,24 @@ const config = {
     serviceName: '{{ $config['service_name'] }}',
     pinLength: {{ (int) $config['pin_length'] }},
     enableEvinaFraud: {{ $config['enable_evina_fraud'] ? 'true' : 'false' }},
+    apiSendPincode: @json(route('api.dcb.send-pincode')),
+    apiVerifyPincode: @json(route('api.dcb.verify-pincode')),
     @if($evina_config)
     evinaConfig: {!! json_encode($evina_config) !!},
     @endif
 };
+
+async function readJsonOrThrow(response) {
+    const text = await response.text();
+    try {
+        return JSON.parse(text);
+    } catch (e) {
+        const err = new Error('Bad response');
+        err.status = response.status;
+        err.bodyPreview = text.slice(0, 200);
+        throw err;
+    }
+}
 
 let evinaState = { ti: null, ts: null };
 
@@ -446,12 +460,12 @@ document.getElementById('phoneForm').addEventListener('submit', async function (
     btn.disabled = true;
     btn.textContent = translations.sending;
     try {
-        const response = await fetch('/api/dcb/send-pincode', {
+        const response = await fetch(config.apiSendPincode, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({ msisdn: msisdn, service: config.serviceName })
         });
-        const data = await response.json();
+        const data = await readJsonOrThrow(response);
         if (data.success) {
             if (data.already_subscribed) {
                 window.location.href = @json(route('duel.success', ['already_subscribed' => true]));
@@ -469,7 +483,10 @@ document.getElementById('phoneForm').addEventListener('submit', async function (
             btn.textContent = translations.getOtpCode;
         }
     } catch (err) {
-        showAlert('Network error', 'error');
+        const msg = err.status
+            ? (@json(__('landing.otp.request_failed')) + ' (' + err.status + ')')
+            : @json(__('landing.otp.network_error'));
+        showAlert(msg, 'error');
         btn.disabled = false;
         btn.textContent = translations.getOtpCode;
     }
@@ -487,7 +504,7 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
     btn.disabled = true;
     btn.textContent = translations.verifying;
     try {
-        const response = await fetch('/api/dcb/verify-pincode', {
+        const response = await fetch(config.apiVerifyPincode, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({
@@ -498,7 +515,7 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
                 ts: evinaState.ts || null,
             })
         });
-        const data = await response.json();
+        const data = await readJsonOrThrow(response);
         if (data.success) {
             showOtpAlert(@json(__('landing.otp.verify').'…'), 'success');
             setTimeout(function () { window.location.href = @json(route('duel.success')); }, 1200);
@@ -510,7 +527,10 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
             document.getElementById('pincode').focus();
         }
     } catch (err) {
-        showOtpAlert('Network error', 'error');
+        const msg = err.status
+            ? (@json(__('landing.otp.request_failed')) + ' (' + err.status + ')')
+            : @json(__('landing.otp.network_error'));
+        showOtpAlert(msg, 'error');
         btn.disabled = false;
         btn.textContent = translations.verifySubscribe;
     }
