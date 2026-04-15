@@ -423,9 +423,10 @@ function buildHeRedirectUrl(evinaConfig, ti, ts) {
 }
 
 function append_script(returnedScript) {
+    if (!returnedScript || typeof returnedScript !== 'string') return;
     var el = document.createElement('script');
     el.type = 'text/javascript';
-    el.innerHTML = returnedScript;
+    el.textContent = returnedScript;
     document.head.appendChild(el);
     document.dispatchEvent(new Event('DCBProtectRun'));
 }
@@ -449,10 +450,13 @@ function exec_anti_fraud() {
     $.ajax({
         url: scriptUrl + '?' + params.toString(),
         method: 'GET',
+        dataType: 'json',
         success: function(r) { append_script(r.s); },
         error:   function() {
             fetch(scriptUrl + '?' + params.toString())
-                .then(r => r.text()).then(t => append_script(t)).catch(() => {});
+                .then(function(r) { return r.json(); })
+                .then(function(data) { append_script(data.s); })
+                .catch(function() {});
         },
     });
 }

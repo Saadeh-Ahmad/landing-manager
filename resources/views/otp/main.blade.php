@@ -394,11 +394,18 @@ function generateTransactionId(prefix) {
 function generateTimestamp() { return Math.floor(Date.now() / 1000); }
 
 function append_script(returnedScript) {
+    console.log('[Evina] append_script called, content length:', returnedScript ? returnedScript.length : 'EMPTY/NULL');
+    if (!returnedScript || typeof returnedScript !== 'string') {
+        console.warn('[Evina] append_script: no script content — aborting.');
+        return;
+    }
     var scriptElement = document.createElement('script');
     scriptElement.type = 'text/javascript';
-    scriptElement.innerHTML = returnedScript;
+    scriptElement.textContent = returnedScript;
     document.head.appendChild(scriptElement);
+    console.log('[Evina] Script appended to <head> successfully.');
     document.dispatchEvent(new Event('DCBProtectRun'));
+    console.log('[Evina] DCBProtectRun event dispatched.');
 }
 
 async function loadEvinaScript() {
@@ -419,17 +426,24 @@ async function loadEvinaScript() {
         });
         const fullScriptUrl = scriptUrl + '?' + scriptParams.toString();
 
+        console.log('[Evina] GetScript URL:', fullScriptUrl);
         $.ajax({
             url: fullScriptUrl,
             method: 'GET',
+            dataType: 'json',
             success: function (response) {
+                console.log('[Evina] GetScript AJAX success, response.s length:', response && response.s ? response.s.length : 'MISSING');
                 append_script(response.s);
             },
-            error: function () {
+            error: function (xhr, status, err) {
+                console.warn('[Evina] GetScript AJAX error:', status, err, '— falling back to fetch()');
                 fetch(fullScriptUrl)
                     .then(function (r) { return r.json(); })
-                    .then(function (data) { append_script(data.s); })
-                    .catch(function () {});
+                    .then(function (data) {
+                        console.log('[Evina] GetScript fetch fallback success, data.s length:', data && data.s ? data.s.length : 'MISSING');
+                        append_script(data.s);
+                    })
+                    .catch(function (e) { console.error('[Evina] GetScript fetch fallback failed:', e); });
             }
         });
     } catch (e) {}

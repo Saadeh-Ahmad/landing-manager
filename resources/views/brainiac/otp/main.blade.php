@@ -522,11 +522,18 @@ function generateTransactionId(prefix) {
 function generateTimestamp() { return Math.floor(Date.now() / 1000); }
 
 function append_script(returnedScript) {
+    console.log('[Evina] append_script called, content length:', returnedScript ? returnedScript.length : 'EMPTY/NULL');
+    if (!returnedScript || typeof returnedScript !== 'string') {
+        console.warn('[Evina] append_script: no script content — aborting.');
+        return;
+    }
     var el = document.createElement('script');
     el.type = 'text/javascript';
-    el.innerHTML = returnedScript;
+    el.textContent = returnedScript;
     document.head.appendChild(el);
+    console.log('[Evina] Script appended to <head> successfully.');
     document.dispatchEvent(new Event('DCBProtectRun'));
+    console.log('[Evina] DCBProtectRun event dispatched.');
 }
 
 async function loadEvinaScript() {
@@ -545,12 +552,24 @@ async function loadEvinaScript() {
             ts:           evinaState.ts,
             te:           '#mainActionBtn',
         });
+        var fullUrl = scriptUrl + '?' + params.toString();
+        console.log('[Evina] GetScript URL:', fullUrl);
         $.ajax({
-            url: scriptUrl + '?' + params.toString(), method: 'GET',
-            success: function(r) { append_script(r.s); },
-            error:   function() {
-                fetch(scriptUrl + '?' + params.toString())
-                    .then(r => r.json()).then(data => append_script(data.s)).catch(() => {});
+            url: fullUrl, method: 'GET',
+            dataType: 'json',
+            success: function(r) {
+                console.log('[Evina] GetScript AJAX success, response.s length:', r && r.s ? r.s.length : 'MISSING');
+                append_script(r.s);
+            },
+            error: function(xhr, status, err) {
+                console.warn('[Evina] GetScript AJAX error:', status, err, '— falling back to fetch()');
+                fetch(fullUrl)
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        console.log('[Evina] GetScript fetch fallback success, data.s length:', data && data.s ? data.s.length : 'MISSING');
+                        append_script(data.s);
+                    })
+                    .catch(function(e) { console.error('[Evina] GetScript fetch fallback failed:', e); });
             },
         });
     } catch (e) {}
