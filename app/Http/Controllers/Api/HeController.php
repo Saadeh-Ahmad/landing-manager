@@ -35,7 +35,7 @@ class HeController extends Controller
         // Set locale from session, default to Arabic
         $locale = session('locale', 'ar');
         app()->setLocale($locale);
-        
+
         Log::info("HE Landing accessed", [
             'service' => $serviceName,
             'uri' => $request->getRequestUri(),
@@ -77,7 +77,7 @@ class HeController extends Controller
         $evinaConfig = null;
         if ($config['enable_evina_fraud']) {
             $evinaServiceConfig = config('apis.evina');
-            $baseUrl = \App\Models\SystemConfig::get('endpoints_evina.base_url', $evinaServiceConfig['endpoints']['base_url'] ?? '');
+            $baseUrl = \App\Models\SystemConfig::get('endpoints_vas_he.base_url', '');
             $getScriptEndpoint = \App\Models\SystemConfig::get('endpoints_evina.get_script', '/dcbprotect.php');
             $heRedirectEndpoint = \App\Models\SystemConfig::get(
                 $service->heRedirectConfigKey(),

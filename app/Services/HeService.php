@@ -29,7 +29,7 @@ class HeService
             $service->heRedirectConfigKey(),
             $service->defaultHeRedirectPath()
         );
-        $baseUrl = SystemConfig::get('endpoints_evina.base_url', config('apis.evina.endpoints.base_url', ''));
+        $baseUrl = SystemConfig::get('endpoints_vas_he.base_url','');
         $baseUrl = str_replace('https', 'http', $baseUrl);
 
         // Build full URL

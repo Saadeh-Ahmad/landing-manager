@@ -68,7 +68,7 @@ class OtpController extends Controller
         $evinaConfig = null;
         if ($config['enable_evina_fraud']) {
             $evinaServiceConfig = config('apis.evina');
-            $baseUrl = \App\Models\SystemConfig::get('endpoints_evina.base_url', $evinaServiceConfig['endpoints']['base_url'] ?? '');
+            $baseUrl = \App\Models\SystemConfig::get('endpoints_evina.base_url', '');
             $getScriptEndpoint = \App\Models\SystemConfig::get('endpoints_evina.get_script', '/dcbprotect.php');
 
             $evinaConfig = [

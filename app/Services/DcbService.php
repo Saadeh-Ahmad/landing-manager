@@ -119,7 +119,7 @@ class DcbService
 
             return [
                 'status' => 'error',
-                'message' => 'Failed to send PIN code.',
+                'message' => 'Failed to send PIN code (HTTP '.$code.').'.$hint,
                 'error' => $response->body(),
                 'status_code' => $code,
             ];
