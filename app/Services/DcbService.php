@@ -119,7 +119,7 @@ class DcbService
 
             return [
                 'status' => 'error',
-                'message' => 'Failed to send PIN code (HTTP '.$code.').'.$hint,
+                'message' => 'Failed to send PIN code.',
                 'error' => $response->body(),
                 'status_code' => $code,
             ];
@@ -180,7 +180,7 @@ class DcbService
 
             // Build API URL using ServiceConfig
             $params = [
-                'user' => $service->api_username,
+                'username' => $service->api_username,
                 'password' => $service->api_password,
                 'msisdn' => $msisdn,
                 'pincode' => $pincode,
