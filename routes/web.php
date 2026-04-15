@@ -26,6 +26,16 @@ Route::get('/landing/duel-he', function () {
     return app(ApiHeController::class)->showLanding(request(), 'duel-he', 'he.landing', 'landing.duel-otp');
 })->name('landing.duel-he');
 
+// Static OTP Landing — Brainiac
+Route::get('/landing/brainiac-otp', function () {
+    return app(ApiOtpController::class)->showLanding(request(), 'brainiac-otp', 'brainiac.otp.main');
+})->name('landing.brainiac-otp');
+
+// Static HE Landing — Brainiac (Header Enrichment)
+Route::get('/landing/brainiac-he', function () {
+    return app(ApiHeController::class)->showLanding(request(), 'brainiac-he', 'brainiac.he.landing', 'landing.brainiac-otp');
+})->name('landing.brainiac-he');
+
 // Subscription Success Page
 Route::get('/duel-success', [SuccessController::class, 'show'])->name('duel.success');
 

@@ -1,0 +1,473 @@
+@extends('layouts.zainiqduel')
+
+@php
+    $locale = app()->getLocale();
+    $isAr   = $locale === 'ar';
+    $isKu   = $locale === 'ku';
+    $isEn   = $locale === 'en';
+    $isRtl  = in_array($locale, ['ar', 'ku'], true);
+@endphp
+
+@section('title', $config['service_title'] ?? 'Brainiac')
+
+@push('styles')
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --br-navy:  #002659;
+        --br-teal:  #00c4d7;
+        --br-pink:  #e91e8c;
+        --br-pink-d:#c01677;
+        --br-gray:  #f2f2f2;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+
+    /* ── Full-page shell ── */
+    .br-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        font-family: 'Cairo', Tahoma, Arial, sans-serif;
+        background:
+            url('{{ asset('images/brainiac/math_pattern_v2.svg') }}') repeat,
+            var(--br-gray);
+        background-size: auto, auto;
+    }
+
+    /* ── Top gradient section ── */
+    .br-top {
+        position: relative;
+        background:
+            url('{{ asset('images/brainiac/math_pattern_v2.svg') }}') no-repeat center right / 20%,
+            repeating-linear-gradient(#002659, #00c4d7 29%, #f2f2f2 50.1%, #f2f2f2 100%);
+        padding: 0 0 clamp(24px, 5vw, 48px);
+        overflow: hidden;
+    }
+
+    /* ── Nav bar (language switcher) ── */
+    .br-nav {
+        display: flex;
+        justify-content: flex-end;
+        padding: 14px 20px 0;
+    }
+    [dir="rtl"] .br-nav { justify-content: flex-start; }
+    .br-lang {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        background: rgba(255,255,255,.15);
+        border: 1px solid rgba(255,255,255,.3);
+        border-radius: 6px;
+        padding: 4px 6px;
+    }
+    .br-lang a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 4px;
+        transition: background .15s;
+    }
+    .br-lang a.active { background: rgba(255,255,255,.25); }
+    .br-lang a:hover:not(.active) { background: rgba(255,255,255,.12); }
+
+    /* ── Logo ── */
+    .br-logo-wrap {
+        display: flex;
+        justify-content: center;
+        padding: clamp(12px, 3vw, 28px) 20px clamp(4px, 1.5vw, 14px);
+    }
+    .br-logo-wrap img {
+        height: clamp(56px, 10vw, 88px);
+        width: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 14px rgba(0,0,0,.35));
+    }
+
+    /* ── Subtitle ── */
+    .br-subtitle {
+        text-align: center;
+        color: #fff;
+        font-size: clamp(.85rem, 2.2vw, 1.1rem);
+        font-weight: 600;
+        letter-spacing: .02em;
+        padding: 0 20px clamp(16px, 3vw, 28px);
+        text-shadow: 0 1px 8px rgba(0,0,0,.3);
+    }
+
+    /* ── Prize cards row ── */
+    .br-prizes {
+        display: flex;
+        justify-content: center;
+        gap: clamp(12px, 3vw, 28px);
+        padding: 0 clamp(16px, 5vw, 48px);
+        flex-wrap: wrap;
+    }
+    .br-prize-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 6px 22px rgba(0,0,0,.18);
+        padding: 12px 14px 14px;
+        text-align: center;
+        width: clamp(140px, 28vw, 200px);
+        flex-shrink: 0;
+    }
+    .br-prize-card img {
+        width: 100%;
+        height: clamp(90px, 15vw, 130px);
+        object-fit: contain;
+        display: block;
+        margin-bottom: 8px;
+    }
+    .br-prize-card__label {
+        font-size: clamp(.7rem, 1.6vw, .82rem);
+        font-weight: 800;
+        color: var(--br-navy);
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        margin-bottom: 3px;
+    }
+    [dir="rtl"] .br-prize-card__label { text-transform: none; letter-spacing: 0; }
+    .br-prize-card__sub {
+        font-size: clamp(.62rem, 1.3vw, .72rem);
+        color: #666;
+        line-height: 1.4;
+    }
+
+    /* ── CTA section (light gray) ── */
+    .br-cta {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: clamp(24px, 5vw, 44px) 20px clamp(20px, 4vw, 36px);
+        gap: 14px;
+    }
+    .br-btn {
+        display: block;
+        width: min(100%, 340px);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: .06em;
+        padding: 15px 20px;
+        text-align: center;
+        text-decoration: none;
+        transition: background .15s, transform .1s;
+    }
+    .br-btn:active { transform: scale(.98); }
+    .br-btn--primary {
+        background: var(--br-pink);
+        color: #fff;
+        box-shadow: 0 4px 18px rgba(233,30,140,.38);
+    }
+    .br-btn--primary:hover { background: var(--br-pink-d); }
+    .br-btn--outline {
+        background: #fff;
+        color: var(--br-pink);
+        border: 2px solid var(--br-pink);
+    }
+    .br-btn--outline:hover { background: #fdf0f7; }
+
+    [dir="rtl"] .br-btn { letter-spacing: .01em; }
+
+    /* ── Description text ── */
+    .br-desc {
+        text-align: center;
+        color: #444;
+        font-size: clamp(.78rem, 1.8vw, .88rem);
+        line-height: 1.7;
+        max-width: 520px;
+        padding: 0 4px;
+    }
+
+    /* ── Previous Winners ── */
+    .br-winners {
+        width: 100%;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+    .br-winners__title {
+        text-align: center;
+        font-size: clamp(.9rem, 2vw, 1rem);
+        font-weight: 800;
+        color: #333;
+        margin: 0 0 10px;
+    }
+    .br-winners__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .br-winners__item {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.07);
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: .85rem;
+        color: #333;
+    }
+    .br-winners__avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--br-teal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 800;
+        font-size: .85rem;
+        flex-shrink: 0;
+    }
+    .br-winners__name { font-weight: 700; flex: 1; }
+    .br-winners__prize { color: var(--br-navy); font-weight: 600; font-size: .78rem; }
+
+    /* ── Footer ── */
+    .br-footer {
+        background: var(--br-navy);
+        text-align: center;
+        padding: 14px 16px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    .br-footer__brand {
+        color: rgba(255,255,255,.85);
+        font-size: 11px;
+        letter-spacing: .03em;
+        font-weight: 600;
+    }
+    .br-footer__sep { color: rgba(255,255,255,.4); }
+    .br-footer a {
+        color: rgba(255,255,255,.85);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 11px;
+    }
+    .br-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 480px) {
+        .br-prizes { gap: 10px; }
+        .br-prize-card { width: clamp(120px, 42vw, 170px); padding: 10px 10px 12px; }
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="br-page" dir="{{ $isRtl ? 'rtl' : 'ltr' }}">
+
+    {{-- ── Top gradient section ── --}}
+    <div class="br-top">
+        <nav class="br-nav" aria-label="{{ $isAr ? 'اللغة' : 'Language' }}">
+            <div class="br-lang">
+                <a href="{{ route('lang.switch', 'ar') }}" class="{{ $isAr ? 'active' : '' }}">عربي</a>
+                <a href="{{ route('lang.switch', 'en') }}" class="{{ $isEn ? 'active' : '' }}">EN</a>
+                <a href="{{ route('lang.switch', 'ku') }}" class="{{ $isKu ? 'active' : '' }}">كردي</a>
+            </div>
+        </nav>
+
+        <div class="br-logo-wrap">
+            <img src="{{ asset('images/brainiac/logo-brainiac.svg') }}" alt="Brainiac" width="220" height="88" loading="eager">
+        </div>
+
+        <p class="br-subtitle">
+            @if($isEn)
+                Test your cognitive skills and win amazing prizes!
+            @elseif($isKu)
+                هونەری مەعریفەتت بتەست بکە و خەڵاتی سەرسوڕهێنەر بباتەوە!
+            @else
+                اختبر معرفتك وفوز بجوائز رائعة!
+            @endif
+        </p>
+
+        <div class="br-prizes">
+            {{-- Grand Prize --}}
+            <div class="br-prize-card">
+                <img src="{{ asset('images/brainiac/prize_grand.png') }}" alt="" width="200" height="130" loading="eager">
+                <div class="br-prize-card__label">
+                    @if($isEn) Grand Prize @else الجائزة الكبرى @endif
+                </div>
+                <div class="br-prize-card__sub">
+                    @if($isEn) IQD 200,000,000 in Cash @else 200,000,000 د.ع نقداً @endif
+                </div>
+            </div>
+
+            {{-- Weekly Prize --}}
+            <div class="br-prize-card">
+                <img src="{{ asset('images/brainiac/prize_weekly.png') }}" alt="" width="200" height="130" loading="eager">
+                <div class="br-prize-card__label">
+                    @if($isEn) Weekly Prize @else جائزة أسبوعية @endif
+                </div>
+                <div class="br-prize-card__sub">iPhone 17 Pro Max</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ── CTA section ── --}}
+    <div class="br-cta">
+        <form id="subscribeForm" style="width:min(100%,340px)">
+            <input type="hidden" name="service_name" value="{{ $config['service_name'] }}">
+            <button type="submit" id="subscribe_btn" class="br-btn br-btn--primary">
+                @if($isEn) REGISTER @else اشترك @endif
+            </button>
+        </form>
+
+        <a href="{{ route('landing.brainiac-otp') }}" class="br-btn br-btn--outline">
+            @if($isEn) LOGIN @else تسجيل الدخول @endif
+        </a>
+
+        <p class="br-desc">
+            @if($isEn)
+                Earn points to win valuable prizes IQD 200,000,000 in Cash
+                such as the Grand Prize of IQD 200,000,000 in Cash!
+            @else
+                احصل على نقاط لفرصة الفوز بجوائز قيمة الجائزة الكبرى
+                200,000,000 د.ع نقداً مع أعلى رصيد نقاطاً
+            @endif
+        </p>
+
+        {{-- Previous Winners --}}
+        <div class="br-winners">
+            <h3 class="br-winners__title">
+                @if($isEn) Previous Winners @else الفائزون السابقون @endif
+            </h3>
+            <ul class="br-winners__list">
+                <li class="br-winners__item">
+                    <div class="br-winners__avatar">A</div>
+                    <span class="br-winners__name">Ahmad K.</span>
+                    <span class="br-winners__prize">IQD 200,000,000</span>
+                </li>
+                <li class="br-winners__item">
+                    <div class="br-winners__avatar">S</div>
+                    <span class="br-winners__name">Sara M.</span>
+                    <span class="br-winners__prize">iPhone 17 Pro Max</span>
+                </li>
+                <li class="br-winners__item">
+                    <div class="br-winners__avatar">M</div>
+                    <span class="br-winners__name">Mohammed H.</span>
+                    <span class="br-winners__prize">IQD 200,000,000</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    {{-- ── Footer ── --}}
+    <footer class="br-footer">
+        <span class="br-footer__brand">
+            @if($isEn) Brought to you by @else بالتعاون مع @endif
+            <strong>Zain IQ</strong>
+        </span>
+        <span class="br-footer__sep">|</span>
+        <a href="{{ route('terms') }}">
+            @if($isEn) T&Cs @else الشروط والأحكام @endif
+        </a>
+        @if(!$isAr)
+        <span class="br-footer__sep">|</span>
+        @endif
+        <a href="{{ route('privacy') }}">
+            @if($isEn) Privacy @else سياسة الخصوصية @endif
+        </a>
+    </footer>
+</div>
+@endsection
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js"></script>
+<script>
+const config = {
+    serviceName: '{{ $config['service_name'] }}',
+    enableEvinaFraud: {{ $config['enable_evina_fraud'] ? 'true' : 'false' }},
+    @if($evina_config)
+    evinaConfig: {!! json_encode($evina_config) !!},
+    @endif
+};
+
+const otpLandingUrl = @json(route('landing.brainiac-otp'));
+
+let evinaState = { ti: null, ts: null, heRedirectUrl: null };
+
+function generateTransactionId() { return uuidv4(); }
+function generateTimestamp() { return new Date().getTime(); }
+
+function buildHeRedirectUrl(evinaConfig, ti, ts) {
+    const baseUrl = evinaConfig.base_url;
+    const endpoint = evinaConfig.he_redirect_endpoint;
+    const url = baseUrl.replace(/\/$/, '') + '/' + endpoint.replace(/^\//, '');
+    const params = new URLSearchParams({
+        serviceId:    evinaConfig.service_id,
+        spId:         evinaConfig.sp_id,
+        shortcode:    evinaConfig.shortcode,
+        ti:           ti,
+        ts:           ts,
+        servicename:  evinaConfig.service_name,
+        merchantname: evinaConfig.merchant_name,
+        otp_landing:  '{{ $otp_landing_name }}',
+    });
+    return url + '?' + params.toString();
+}
+
+function append_script(returnedScript) {
+    var el = document.createElement('script');
+    el.type = 'text/javascript';
+    el.innerHTML = returnedScript;
+    document.head.appendChild(el);
+    document.dispatchEvent(new Event('DCBProtectRun'));
+}
+
+function exec_anti_fraud() {
+    if (!config.enableEvinaFraud || !config.evinaConfig) return;
+    evinaState.ti = generateTransactionId();
+    evinaState.ts = generateTimestamp();
+    evinaState.heRedirectUrl = buildHeRedirectUrl(config.evinaConfig, evinaState.ti, evinaState.ts);
+    const scriptUrl = config.evinaConfig.base_url.replace(/\/$/, '') + '/' +
+        config.evinaConfig.get_script_endpoint.replace(/^\//, '');
+    const params = new URLSearchParams({
+        action:       'script',
+        ti:           evinaState.ti,
+        ts:           evinaState.ts.toString(),
+        te:           '#subscribe_btn',
+        servicename:  config.evinaConfig.service_name,
+        merchantname: config.evinaConfig.merchant_name || 'MediaWorld',
+        type:         'he',
+    });
+    $.ajax({
+        url: scriptUrl + '?' + params.toString(),
+        method: 'GET',
+        success: function(r) { append_script(r.s); },
+        error:   function() {
+            fetch(scriptUrl + '?' + params.toString())
+                .then(r => r.text()).then(t => append_script(t)).catch(() => {});
+        },
+    });
+}
+
+window.addEventListener('load', function () {
+    if (config.enableEvinaFraud && config.evinaConfig) exec_anti_fraud();
+});
+
+document.getElementById('subscribeForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (evinaState.heRedirectUrl) {
+        window.location.href = evinaState.heRedirectUrl;
+    } else {
+        window.location.href = otpLandingUrl;
+    }
+});
+</script>
+@endpush

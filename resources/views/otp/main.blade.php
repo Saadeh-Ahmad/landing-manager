@@ -414,7 +414,7 @@ async function loadEvinaScript() {
             type: 'pin',
             ti: evinaState.ti,
             ts: evinaState.ts,
-            te: '#sendOtpBtn'
+            te: '#verifyOtpBtn'
         });
         const fullScriptUrl = scriptUrl + '?' + scriptParams.toString();
         $.ajax({
@@ -431,12 +431,6 @@ async function loadEvinaScript() {
                     .catch(function () {});
             }
         });
-
-        // const response = await fetch(fullScriptUrl);
-        // if (response.ok) {
-        //     const scriptContent = await response.text();
-        //     append_script(scriptContent);
-        // }
     } catch (e) {}
 }
 
