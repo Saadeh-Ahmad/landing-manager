@@ -17,6 +17,7 @@ class SystemConfigSeeder extends Seeder
     public function run(): void
     {
         $evinaBase = config('apis.evina.endpoints.base_url', 'http://www.social-sms.com/iq-dcb');
+        $heBase = config('apis.vas_operator.he_base_url', 'http://www.social-sms.com/iq-duel');
         $dcbEp = config('apis.evina.endpoints', []);
         $vas = config('apis.vas_operator', []);
 
@@ -66,6 +67,30 @@ class SystemConfigSeeder extends Seeder
                 'type' => 'string',
                 'group' => 'endpoints_dcb',
                 'description' => 'DCB endpoint for send SMS',
+            ],
+
+            // --- Evina Anti-Fraud platform (shared by OTP and HE flows) ---
+            [
+                'key'         => 'endpoints_evina.base_url',
+                'value'       => $evinaBase,
+                'type'        => 'string',
+                'group'       => 'endpoints_evina',
+                'description' => 'Evina GetScript base URL (http://www.social-sms.com/iq-dcb)',
+            ],
+            [
+                'key'         => 'endpoints_evina.get_script',
+                'value'       => '/dcbprotect.php',
+                'type'        => 'string',
+                'group'       => 'endpoints_evina',
+                'description' => 'Evina GetScript endpoint path (/dcbprotect.php)',
+            ],
+            // endpoints_vas_he.base_url — used by HeController for one-click HE Evina calls
+            [
+                'key'         => 'endpoints_vas_he.base_url',
+                'value'       => $heBase,
+                'type'        => 'string',
+                'group'       => 'endpoints_vas_he',
+                'description' => 'Evina base URL for VAS HE flow (same host as OTP Evina)',
             ],
 
             // --- VAS operator (VMS API + one-click HE, Evina) ---

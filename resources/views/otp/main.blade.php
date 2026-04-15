@@ -418,28 +418,28 @@ async function loadEvinaScript() {
             te: '#mainActionBtn'
         });
         const fullScriptUrl = scriptUrl + '?' + scriptParams.toString();
-        console.log('fullScriptUrl' + fullScriptUrl);
 
         $.ajax({
             url: fullScriptUrl,
             method: 'GET',
             success: function (response) {
-                var script_data = response.s;
-                append_script(script_data);
+                append_script(response.s);
             },
             error: function () {
                 fetch(fullScriptUrl)
-                    .then(function (r) { return r.text(); })
-                    .then(function (t) { append_script(t); })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) { append_script(data.s); })
                     .catch(function () {});
             }
         });
     } catch (e) {}
 }
 
-if (config.enableEvinaFraud && config.evinaConfig) {
-    loadEvinaScript();
-}
+window.addEventListener('load', function () {
+    if (config.enableEvinaFraud && config.evinaConfig) {
+        loadEvinaScript();
+    }
+});
 
 let currentMsisdn = '';
 
@@ -539,6 +539,8 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
             mainBtn.textContent = translations.verifySubscribe;
             document.getElementById('pincode').value = '';
             document.getElementById('pincode').focus();
+            // Regenerate ti/ts per Evina guide: "If failure, reload with a new ti and ts"
+            if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
         }
     } catch (err) {
         const msg = err.status
@@ -547,6 +549,8 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
         showOtpAlert(msg, 'error');
         mainBtn.disabled = false;
         mainBtn.textContent = translations.verifySubscribe;
+        // Regenerate ti/ts per Evina guide: "If failure, reload with a new ti and ts"
+        if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
     }
 });
 

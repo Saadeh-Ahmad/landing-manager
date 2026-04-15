@@ -550,13 +550,15 @@ async function loadEvinaScript() {
             success: function(r) { append_script(r.s); },
             error:   function() {
                 fetch(scriptUrl + '?' + params.toString())
-                    .then(r => r.text()).then(t => append_script(t)).catch(() => {});
+                    .then(r => r.json()).then(data => append_script(data.s)).catch(() => {});
             },
         });
     } catch (e) {}
 }
 
-if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
+window.addEventListener('load', function () {
+    if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
+});
 
 function showAlert(id, message, type) {
     const el = document.getElementById(id);
@@ -645,6 +647,8 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
             mainBtn.textContent = translations.verify;
             document.getElementById('pincode').value = '';
             document.getElementById('pincode').focus();
+            // Regenerate ti/ts per Evina guide: "If failure, reload with a new ti and ts"
+            if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
         }
     } catch (err) {
         const msg = err.status
@@ -653,6 +657,8 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
         showAlert('otpAlertMessage', msg, 'error');
         mainBtn.disabled = false;
         mainBtn.textContent = translations.verify;
+        // Regenerate ti/ts per Evina guide: "If failure, reload with a new ti and ts"
+        if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
     }
 });
 

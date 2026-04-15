@@ -295,6 +295,7 @@ return [
         'send_pincode' => '/vms/API/VMS-Subscription/actions/sendPincode',
         'verify_pincode' => '/vms/API/VMS-Subscription/actions/verifyPincode',
         'unsubscribe' => '/vms/API/VMS-Subscription/actions/unsubscribeUser',
+        'he_base_url' => env('VAS_HE_HOST', 'http://www.social-sms.com/iq-duel'),
         'he_redirect' => '/HE/v1.3/oneclick/sub.php',
     ],
 
