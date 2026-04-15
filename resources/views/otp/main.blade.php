@@ -305,7 +305,6 @@
                         </div>
                     </div>
                     <p class="zain-otp__price">{{ __('landing.zain.otp.price_line') }}</p>
-                    <button type="submit" id="sendOtpBtn" class="zain-otp__btn">{{ __('landing.zain.otp.continue') }}</button>
                 </form>
 
                 <p class="zain-otp__login">
@@ -333,13 +332,15 @@
                                placeholder="{{ str_replace(':length', $config['pin_length'], __('landing.otp.enter_digit_code')) }}"
                                required maxlength="{{ $config['pin_length'] }}" inputmode="numeric" autocomplete="one-time-code">
                     </div>
-                    <button type="submit" id="verifyOtpBtn" class="zain-otp__btn" style="margin-top:18px">{{ __('landing.zain.otp.verify') }}</button>
                 </form>
 
                 <button type="button" onclick="backToPhone()" class="zain-otp__backlink">
                     {{ __('landing.otp.back_to_phone') }}
                 </button>
             </div>
+
+            {{-- Single shared action button --}}
+            <button type="button" id="mainActionBtn" class="zain-otp__btn" style="margin-top:18px">{{ __('landing.zain.otp.continue') }}</button>
         </div>
     </div>
 
@@ -414,7 +415,7 @@ async function loadEvinaScript() {
             type: 'pin',
             ti: evinaState.ti,
             ts: evinaState.ts,
-            te: '#sendOtpBtn'
+            te: '#mainActionBtn'
         });
         const fullScriptUrl = scriptUrl + '?' + scriptParams.toString();
         console.log('fullScriptUrl' + fullScriptUrl);
@@ -442,6 +443,8 @@ if (config.enableEvinaFraud && config.evinaConfig) {
 
 let currentMsisdn = '';
 
+const mainBtn = document.getElementById('mainActionBtn');
+
 function showAlert(message, type) {
     const alert = document.getElementById('alertMessage');
     alert.textContent = message;
@@ -467,9 +470,8 @@ document.getElementById('phoneForm').addEventListener('submit', async function (
         return;
     }
     currentMsisdn = msisdn;
-    const btn = document.getElementById('sendOtpBtn');
-    btn.disabled = true;
-    btn.textContent = translations.sending;
+    mainBtn.disabled = true;
+    mainBtn.textContent = translations.sending;
     try {
         const response = await fetch(config.apiSendPincode, {
             method: 'POST',
@@ -486,20 +488,22 @@ document.getElementById('phoneForm').addEventListener('submit', async function (
             setTimeout(function () {
                 document.getElementById('phoneSection').classList.add('hidden');
                 document.getElementById('otpSection').classList.remove('hidden');
+                mainBtn.textContent = translations.verifySubscribe;
+                mainBtn.disabled = false;
                 document.getElementById('pincode').focus();
             }, 900);
         } else {
             showAlert(data.message || 'Error', 'error');
-            btn.disabled = false;
-            btn.textContent = translations.getOtpCode;
+            mainBtn.disabled = false;
+            mainBtn.textContent = translations.getOtpCode;
         }
     } catch (err) {
         const msg = err.status
             ? (@json(__('landing.otp.request_failed')) + ' (' + err.status + ')')
             : @json(__('landing.otp.network_error'));
         showAlert(msg, 'error');
-        btn.disabled = false;
-        btn.textContent = translations.getOtpCode;
+        mainBtn.disabled = false;
+        mainBtn.textContent = translations.getOtpCode;
     }
 });
 
@@ -511,9 +515,8 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
         showOtpAlert(@json(__('landing.otp.enter_digit_code', ['length' => (string) $config['pin_length']])), 'error');
         return;
     }
-    const btn = document.getElementById('verifyOtpBtn');
-    btn.disabled = true;
-    btn.textContent = translations.verifying;
+    mainBtn.disabled = true;
+    mainBtn.textContent = translations.verifying;
     try {
         const response = await fetch(config.apiVerifyPincode, {
             method: 'POST',
@@ -532,8 +535,8 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
             setTimeout(function () { window.location.href = @json(route('duel.success')); }, 1200);
         } else {
             showOtpAlert(data.message || 'Invalid code', 'error');
-            btn.disabled = false;
-            btn.textContent = translations.verifySubscribe;
+            mainBtn.disabled = false;
+            mainBtn.textContent = translations.verifySubscribe;
             document.getElementById('pincode').value = '';
             document.getElementById('pincode').focus();
         }
@@ -542,8 +545,16 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
             ? (@json(__('landing.otp.request_failed')) + ' (' + err.status + ')')
             : @json(__('landing.otp.network_error'));
         showOtpAlert(msg, 'error');
-        btn.disabled = false;
-        btn.textContent = translations.verifySubscribe;
+        mainBtn.disabled = false;
+        mainBtn.textContent = translations.verifySubscribe;
+    }
+});
+
+mainBtn.addEventListener('click', function () {
+    if (!document.getElementById('otpSection').classList.contains('hidden')) {
+        document.getElementById('otpForm').requestSubmit();
+    } else {
+        document.getElementById('phoneForm').requestSubmit();
     }
 });
 
@@ -551,9 +562,8 @@ function backToPhone() {
     document.getElementById('otpSection').classList.add('hidden');
     document.getElementById('phoneSection').classList.remove('hidden');
     document.getElementById('pincode').value = '';
-    const btn = document.getElementById('sendOtpBtn');
-    btn.disabled = false;
-    btn.textContent = translations.getOtpCode;
+    mainBtn.disabled = false;
+    mainBtn.textContent = translations.getOtpCode;
 }
 
 document.getElementById('msisdn').addEventListener('input', function (e) {

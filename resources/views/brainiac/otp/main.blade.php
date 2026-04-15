@@ -399,9 +399,6 @@
                             <a href="{{ route('terms') }}" style="color:var(--br-pink);text-decoration:none;">الشروط والأحكام</a>
                         @endif
                     </p>
-                    <button type="submit" id="sendOtpBtn" class="br-otp-btn">
-                        @if($isEn) SUBSCRIBE @else اشترك @endif
-                    </button>
                 </form>
 
                 <p class="br-otp-login">
@@ -449,15 +446,17 @@
                            placeholder="{{ str_repeat('•', $config['pin_length']) }}"
                            required maxlength="{{ $config['pin_length'] }}"
                            inputmode="numeric" autocomplete="one-time-code">
-                    <button type="submit" id="verifyOtpBtn" class="br-otp-btn" style="margin-top:18px">
-                        @if($isEn) VERIFY & SUBSCRIBE @else تحقق والاشتراك @endif
-                    </button>
                 </form>
 
                 <button type="button" onclick="backToPhone()" class="br-otp-back">
                     @if($isEn) ← Back to phone number @else ← العودة إلى رقم الهاتف @endif
                 </button>
             </div>
+
+            {{-- ── Single shared action button ── --}}
+            <button type="button" id="mainActionBtn" class="br-otp-btn" style="margin-top:18px">
+                @if($isEn) SUBSCRIBE @else اشترك @endif
+            </button>
 
         </div>{{-- .br-otp-card --}}
     </div>
@@ -544,7 +543,7 @@ async function loadEvinaScript() {
             type:         'pin',
             ti:           evinaState.ti,
             ts:           evinaState.ts,
-            te:           '#sendOtpBtn',
+            te:           '#mainActionBtn',
         });
         $.ajax({
             url: scriptUrl + '?' + params.toString(), method: 'GET',
@@ -567,6 +566,8 @@ function showAlert(id, message, type) {
     setTimeout(() => el.classList.add('hidden'), 5000);
 }
 
+const mainBtn = document.getElementById('mainActionBtn');
+
 document.getElementById('phoneForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const raw = document.getElementById('msisdn').value;
@@ -575,9 +576,8 @@ document.getElementById('phoneForm').addEventListener('submit', async function (
         return;
     }
     currentMsisdn = '964' + raw;
-    const btn = document.getElementById('sendOtpBtn');
-    btn.disabled = true;
-    btn.textContent = translations.sending;
+    mainBtn.disabled = true;
+    mainBtn.textContent = translations.sending;
     try {
         const response = await fetch(config.apiSendPincode, {
             method: 'POST',
@@ -594,20 +594,22 @@ document.getElementById('phoneForm').addEventListener('submit', async function (
             setTimeout(function () {
                 document.getElementById('phoneSection').classList.add('hidden');
                 document.getElementById('otpSection').classList.remove('hidden');
+                mainBtn.textContent = translations.verify;
+                mainBtn.disabled = false;
                 document.getElementById('pincode').focus();
             }, 900);
         } else {
             showAlert('alertMessage', data.message || 'Error', 'error');
-            btn.disabled = false;
-            btn.textContent = translations.subscribe;
+            mainBtn.disabled = false;
+            mainBtn.textContent = translations.subscribe;
         }
     } catch (err) {
         const msg = err.status
             ? (@json($isEn ? 'Server error' : 'خطأ في الخادم') + ' (' + err.status + ')')
             : @json($isEn ? 'Network error. Check your connection.' : 'خطأ في الشبكة. تحقق من الاتصال.');
         showAlert('alertMessage', msg, 'error');
-        btn.disabled = false;
-        btn.textContent = translations.subscribe;
+        mainBtn.disabled = false;
+        mainBtn.textContent = translations.subscribe;
     }
 });
 
@@ -619,9 +621,8 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
         showAlert('otpAlertMessage', @json($isEn ? 'Please enter a valid code.' : 'الرجاء إدخال رمز صحيح.'), 'error');
         return;
     }
-    const btn = document.getElementById('verifyOtpBtn');
-    btn.disabled = true;
-    btn.textContent = translations.verifying;
+    mainBtn.disabled = true;
+    mainBtn.textContent = translations.verifying;
     try {
         const response = await fetch(config.apiVerifyPincode, {
             method: 'POST',
@@ -640,8 +641,8 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
             setTimeout(() => { window.location.href = @json(route('duel.success')); }, 1200);
         } else {
             showAlert('otpAlertMessage', data.message || 'Invalid code', 'error');
-            btn.disabled = false;
-            btn.textContent = translations.verify;
+            mainBtn.disabled = false;
+            mainBtn.textContent = translations.verify;
             document.getElementById('pincode').value = '';
             document.getElementById('pincode').focus();
         }
@@ -650,8 +651,16 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
             ? (@json($isEn ? 'Server error' : 'خطأ في الخادم') + ' (' + err.status + ')')
             : @json($isEn ? 'Network error.' : 'خطأ في الشبكة.');
         showAlert('otpAlertMessage', msg, 'error');
-        btn.disabled = false;
-        btn.textContent = translations.verify;
+        mainBtn.disabled = false;
+        mainBtn.textContent = translations.verify;
+    }
+});
+
+mainBtn.addEventListener('click', function () {
+    if (!document.getElementById('otpSection').classList.contains('hidden')) {
+        document.getElementById('otpForm').requestSubmit();
+    } else {
+        document.getElementById('phoneForm').requestSubmit();
     }
 });
 
@@ -659,9 +668,8 @@ function backToPhone() {
     document.getElementById('otpSection').classList.add('hidden');
     document.getElementById('phoneSection').classList.remove('hidden');
     document.getElementById('pincode').value = '';
-    const btn = document.getElementById('sendOtpBtn');
-    btn.disabled = false;
-    btn.textContent = translations.subscribe;
+    mainBtn.disabled = false;
+    mainBtn.textContent = translations.subscribe;
 }
 
 document.getElementById('msisdn').addEventListener('input', function (e) {
