@@ -414,9 +414,11 @@ async function loadEvinaScript() {
             type: 'pin',
             ti: evinaState.ti,
             ts: evinaState.ts,
-            te: '#verifyOtpBtn'
+            te: '#sendOtpBtn'
         });
         const fullScriptUrl = scriptUrl + '?' + scriptParams.toString();
+        console.log('fullScriptUrl' + fullScriptUrl);
+
         $.ajax({
             url: fullScriptUrl,
             method: 'GET',
