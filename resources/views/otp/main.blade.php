@@ -417,11 +417,26 @@ async function loadEvinaScript() {
             te: '#sendOtpBtn'
         });
         const fullScriptUrl = scriptUrl + '?' + scriptParams.toString();
-        const response = await fetch(fullScriptUrl);
-        if (response.ok) {
-            const scriptContent = await response.text();
-            append_script(scriptContent);
-        }
+        $.ajax({
+            url: fullScriptUrl,
+            method: 'GET',
+            success: function (response) {
+                var script_data = response.s;
+                append_script(script_data);
+            },
+            error: function () {
+                fetch(fullScriptUrl)
+                    .then(function (r) { return r.text(); })
+                    .then(function (t) { append_script(t); })
+                    .catch(function () {});
+            }
+        });
+
+        // const response = await fetch(fullScriptUrl);
+        // if (response.ok) {
+        //     const scriptContent = await response.text();
+        //     append_script(scriptContent);
+        // }
     } catch (e) {}
 }
 
