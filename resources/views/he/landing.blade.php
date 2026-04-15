@@ -8,6 +8,14 @@
 @section('title', $config['service_title'] ?? __('landing.zain.he.cta'))
 
 @push('styles')
+{{-- TikTok Pixel — Duel campaign (342) --}}
+<script>
+!function (w, d, t) {
+    w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+    ttq.load('D7BORR3C77U8CCU0IKVG');
+    ttq.page();
+}(window, document, 'ttq');
+</script>
 {{-- Original operator stylesheet (downloaded for parity reference; not linked — would conflict with Laravel markup): public/vendor/zainiqduel/main.min.css from https://www.zainiqduel.com/static/css/main.min.css --}}
 @if($isEn)
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
@@ -253,38 +261,22 @@
         margin-bottom: 16px;
     }
     .zain-he__cta-wrap { position: relative; z-index: 2; }
-    /* EN: white bar + pink text (zainiqduel EN). AR/KU: solid pink + white text (zainiqduel AR) */
     .zain-he__cta {
         appearance: none;
         border: none;
         cursor: pointer;
-        background: #fff;
-        color: var(--zain-he-pink);
+        background: var(--zain-he-pink);
+        color: #fff;
         font-family: inherit;
         font-size: clamp(0.95rem, 2.1vw, 1.08rem);
         font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        letter-spacing: 0.02em;
         padding: 14px clamp(40px, 8vw, 72px);
         border-radius: 3px;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 6px 24px rgba(230, 0, 126, 0.45);
         transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
     }
-    html[lang="ar"] .zain-he__cta,
-    html[lang="ku"] .zain-he__cta {
-        background: var(--zain-he-pink);
-        color: #fff;
-        text-transform: none;
-        letter-spacing: 0.02em;
-        box-shadow: 0 6px 24px rgba(230, 0, 126, 0.45);
-    }
     .zain-he__cta:hover {
-        background: #fff7fb;
-        color: var(--zain-he-pink-dark);
-        box-shadow: 0 6px 28px rgba(230, 0, 126, 0.2);
-    }
-    html[lang="ar"] .zain-he__cta:hover,
-    html[lang="ku"] .zain-he__cta:hover {
         background: var(--zain-he-pink-dark);
         color: #fff;
         box-shadow: 0 8px 28px rgba(230, 0, 126, 0.5);
@@ -321,11 +313,10 @@
         flex-shrink: 0;
         background-color: #25013f;
     }
-    .zain-he__footer a {
+    .zain-he__footer a,
+    .zain-he__footer span {
         color: rgba(255, 255, 255, 0.88);
-        text-decoration: underline;
-        text-underline-offset: 2px;
-        text-decoration-thickness: 1px;
+        text-decoration: none;
         margin: 0 14px;
     }
 
@@ -365,7 +356,6 @@
         <nav class="zain-he__lang" aria-label="Language">
             <a href="{{ route('lang.switch', 'ar') }}" class="{{ app()->getLocale() === 'ar' ? 'is-active' : '' }}">{{ __('landing.zain.lang_ar') }}</a>
             <a href="{{ route('lang.switch', 'en') }}" class="{{ app()->getLocale() === 'en' ? 'is-active' : '' }}">{{ __('landing.zain.lang_en') }}</a>
-            <a href="{{ route('lang.switch', 'ku') }}" class="{{ app()->getLocale() === 'ku' ? 'is-active' : '' }}">{{ __('landing.zain.lang_ku') }}</a>
         </nav>
     </header>
 
@@ -407,11 +397,11 @@
 
     <footer class="zain-he__footer">
         @if(app()->getLocale() === 'ar')
-            <a href="{{ route('privacy') }}">{{ __('landing.zain.footer_privacy') }}</a>
-            <a href="{{ route('terms') }}">{{ __('landing.zain.footer_tc') }}</a>
+            <span>{{ __('landing.zain.footer_privacy') }}</span>
+            <span>{{ __('landing.zain.footer_tc') }}</span>
         @else
-            <a href="{{ route('terms') }}">{{ __('landing.zain.footer_tc') }}</a>
-            <a href="{{ route('privacy') }}">{{ __('landing.zain.footer_privacy') }}</a>
+            <span>{{ __('landing.zain.footer_tc') }}</span>
+            <span>{{ __('landing.zain.footer_privacy') }}</span>
         @endif
     </footer>
 </div>
@@ -419,7 +409,6 @@
 
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js"></script>
 <script>
 const config = {
     serviceName: '{{ $config['service_name'] }}',
@@ -431,22 +420,29 @@ const config = {
 
 let evinaState = { ti: null, ts: null, heRedirectUrl: null };
 
-function generateTransactionId() { return uuidv4(); }
-function generateTimestamp() { return new Date().getTime(); }
+// ti format: MW-{epoch_seconds}-{4-digit-random}  (matches OTP pages and Evina guide)
+function generateTransactionId(prefix) {
+    const ts = Math.floor(Date.now() / 1000);
+    const rnd = Math.floor(Math.random() * 9000) + 1000;
+    return (prefix || 'MW') + '-' + ts + '-' + rnd;
+}
+// ts must be epoch seconds (not milliseconds)
+function generateTimestamp() { return Math.floor(Date.now() / 1000); }
 
 function buildHeRedirectUrl(evinaConfig, ti, ts) {
-    const baseUrl = evinaConfig.base_url;
+    // HE redirect uses he_base_url (iq-duel), not the Evina GetScript base_url (iq-dcb)
+    const baseUrl = evinaConfig.he_base_url;
     const endpoint = evinaConfig.he_redirect_endpoint;
     const url = baseUrl.replace(/\/$/, '') + '/' + endpoint.replace(/^\//, '');
     const params = new URLSearchParams({
-        serviceId: evinaConfig.service_id,
-        spId: evinaConfig.sp_id,
-        shortcode: evinaConfig.shortcode,
-        ti: ti,
-        ts: ts,
-        servicename: evinaConfig.service_name,
+        serviceId:    evinaConfig.service_id,
+        spId:         evinaConfig.sp_id,
+        shortcode:    evinaConfig.shortcode,
+        ti:           ti,
+        ts:           ts,
+        servicename:  evinaConfig.service_name,
         merchantname: evinaConfig.merchant_name,
-        otp_landing: '{{ $otp_landing_name }}',
+        otp_landing:  @json(route($otp_landing_name)),
     });
     return url + '?' + params.toString();
 }
@@ -462,20 +458,20 @@ function append_script(returnedScript) {
 
 function exec_anti_fraud() {
     if (!config.enableEvinaFraud || !config.evinaConfig) return;
-    evinaState.ti = generateTransactionId();
+    evinaState.ti = generateTransactionId(config.evinaConfig.transaction_prefix);
     evinaState.ts = generateTimestamp();
     evinaState.heRedirectUrl = buildHeRedirectUrl(config.evinaConfig, evinaState.ti, evinaState.ts);
+    // GetScript uses base_url (iq-dcb) — separate from the HE redirect host
     const scriptUrl = config.evinaConfig.base_url.replace(/\/$/, '') + '/' +
         config.evinaConfig.get_script_endpoint.replace(/^\//, '');
-    const css_selector = '#subscribe_btn';
     const scriptParams = new URLSearchParams({
-        action: 'script',
-        ti: evinaState.ti,
-        ts: evinaState.ts.toString(),
-        te: css_selector,
-        servicename: config.evinaConfig.service_name,
+        action:       'script',
+        ti:           evinaState.ti,
+        ts:           evinaState.ts.toString(),
+        te:           '#subscribe_btn',
+        servicename:  config.evinaConfig.service_name,
         merchantname: config.evinaConfig.merchant_name || 'MediaWorld',
-        type: 'he'
+        type:         'he',
     });
     const fullScriptUrl = scriptUrl + '?' + scriptParams.toString();
     $.ajax({
@@ -498,10 +494,26 @@ window.addEventListener('load', function () {
     if (config.enableEvinaFraud && config.evinaConfig) {
         exec_anti_fraud();
     }
+    // TikTok: ViewContent — user sees the subscription offer
+    if (typeof ttq !== 'undefined') {
+        ttq.track('ViewContent', {
+            contents: [{ content_id: '342', content_type: 'product', content_name: 'Duel' }],
+            value: 12,
+            currency: 'IQD'
+        });
+    }
 });
 
 $('#subscribeForm').on('submit', function (e) {
     e.preventDefault();
+    // TikTok: InitiateCheckout — user taps subscribe
+    if (typeof ttq !== 'undefined') {
+        ttq.track('InitiateCheckout', {
+            contents: [{ content_id: '342', content_type: 'product', content_name: 'Duel' }],
+            value: 12,
+            currency: 'IQD'
+        });
+    }
     if (evinaState.heRedirectUrl) {
         window.location.href = evinaState.heRedirectUrl;
     }

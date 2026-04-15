@@ -11,6 +11,14 @@
 @section('title', $config['service_title'] ?? 'Brainiac')
 
 @push('styles')
+{{-- TikTok Pixel — Brainiac campaign (343) --}}
+<script>
+!function (w, d, t) {
+    w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+    ttq.load('D7BP2JRC77U41AUTQ330');
+    ttq.page();
+}(window, document, 'ttq');
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
     :root {
@@ -30,17 +38,13 @@
         flex-direction: column;
         font-family: 'Cairo', Tahoma, Arial, sans-serif;
         background:
-            url('{{ asset('images/brainiac/math_pattern_v2.svg') }}') repeat,
-            var(--br-gray);
-        background-size: auto, auto;
+        url('{{ asset('images/brainiac/math_pattern_v2.svg') }}') left center / 20% repeat, repeating-linear-gradient(rgb(19, 154, 132), rgb(139, 91, 149), rgb(82, 30, 87) 49.9%, rgb(242, 242, 242) 50.1%, rgb(242, 242, 242) 100%) center center;
+        background-position: left center, center center;
     }
 
     /* ── Top gradient section ── */
     .br-top {
         position: relative;
-        background:
-            url('{{ asset('images/brainiac/math_pattern_v2.svg') }}') no-repeat center right / 20%,
-            repeating-linear-gradient(#002659, #00c4d7 29%, #f2f2f2 50.1%, #f2f2f2 100%);
         padding: 0 0 clamp(24px, 5vw, 48px);
         overflow: hidden;
     }
@@ -253,7 +257,8 @@
         font-weight: 600;
     }
     .br-footer__sep { color: rgba(255,255,255,.4); }
-    .br-footer a {
+    .br-footer a,
+    .br-footer span:not(.br-footer__brand):not(.br-footer__sep) {
         color: rgba(255,255,255,.85);
         text-decoration: none;
         font-weight: 600;
@@ -277,7 +282,6 @@
             <div class="br-lang">
                 <a href="{{ route('lang.switch', 'ar') }}" class="{{ $isAr ? 'active' : '' }}">عربي</a>
                 <a href="{{ route('lang.switch', 'en') }}" class="{{ $isEn ? 'active' : '' }}">EN</a>
-                <a href="{{ route('lang.switch', 'ku') }}" class="{{ $isKu ? 'active' : '' }}">كردي</a>
             </div>
         </nav>
 
@@ -298,22 +302,23 @@
         <div class="br-prizes">
             {{-- Grand Prize --}}
             <div class="br-prize-card">
-                <img src="{{ asset('images/brainiac/prize_grand.png') }}" alt="" width="200" height="130" loading="eager">
+                
+            <img src="{{ asset('images/brainiac/prize_weekly.png') }}" alt="" width="200" height="130" loading="eager">
+                <div class="br-prize-card__label">
+                    @if($isEn) Weekly Prize @else جائزة أسبوعية @endif
+                </div>
+                <div class="br-prize-card__sub">iPhone 17 Pro Max</div>
+            </div>
+
+            {{-- Weekly Prize --}}
+            <div class="br-prize-card">
+            <img src="{{ asset('images/brainiac/prize_grand.png') }}" alt="" width="200" height="130" loading="eager">
                 <div class="br-prize-card__label">
                     @if($isEn) Grand Prize @else الجائزة الكبرى @endif
                 </div>
                 <div class="br-prize-card__sub">
                     @if($isEn) IQD 200,000,000 in Cash @else 200,000,000 د.ع نقداً @endif
                 </div>
-            </div>
-
-            {{-- Weekly Prize --}}
-            <div class="br-prize-card">
-                <img src="{{ asset('images/brainiac/prize_weekly.png') }}" alt="" width="200" height="130" loading="eager">
-                <div class="br-prize-card__label">
-                    @if($isEn) Weekly Prize @else جائزة أسبوعية @endif
-                </div>
-                <div class="br-prize-card__sub">iPhone 17 Pro Max</div>
             </div>
         </div>
     </div>
@@ -341,7 +346,7 @@
             @endif
         </p>
 
-        {{-- Previous Winners --}}
+        <!-- {{-- Previous Winners --}}
         <div class="br-winners">
             <h3 class="br-winners__title">
                 @if($isEn) Previous Winners @else الفائزون السابقون @endif
@@ -363,7 +368,7 @@
                     <span class="br-winners__prize">IQD 200,000,000</span>
                 </li>
             </ul>
-        </div>
+        </div> -->
     </div>
 
     {{-- ── Footer ── --}}
@@ -373,22 +378,17 @@
             <strong>Zain IQ</strong>
         </span>
         <span class="br-footer__sep">|</span>
-        <a href="{{ route('terms') }}">
-            @if($isEn) T&Cs @else الشروط والأحكام @endif
-        </a>
+        <span>@if($isEn) T&Cs @else الشروط والأحكام @endif</span>
         @if(!$isAr)
         <span class="br-footer__sep">|</span>
         @endif
-        <a href="{{ route('privacy') }}">
-            @if($isEn) Privacy @else سياسة الخصوصية @endif
-        </a>
+        <span>@if($isEn) Privacy @else سياسة الخصوصية @endif</span>
     </footer>
 </div>
 @endsection
 
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/uuid@latest/dist/umd/uuidv4.min.js"></script>
 <script>
 const config = {
     serviceName: '{{ $config['service_name'] }}',
@@ -402,11 +402,18 @@ const otpLandingUrl = @json(route('landing.brainiac-otp'));
 
 let evinaState = { ti: null, ts: null, heRedirectUrl: null };
 
-function generateTransactionId() { return uuidv4(); }
-function generateTimestamp() { return new Date().getTime(); }
+// ti format: MW-{epoch_seconds}-{4-digit-random}  (matches OTP pages and Evina guide)
+function generateTransactionId(prefix) {
+    const ts = Math.floor(Date.now() / 1000);
+    const rnd = Math.floor(Math.random() * 9000) + 1000;
+    return (prefix || 'MW') + '-' + ts + '-' + rnd;
+}
+// ts must be epoch seconds (not milliseconds)
+function generateTimestamp() { return Math.floor(Date.now() / 1000); }
 
 function buildHeRedirectUrl(evinaConfig, ti, ts) {
-    const baseUrl = evinaConfig.base_url;
+    // HE redirect uses he_base_url (iq-duel), not the Evina GetScript base_url (iq-dcb)
+    const baseUrl = evinaConfig.he_base_url;
     const endpoint = evinaConfig.he_redirect_endpoint;
     const url = baseUrl.replace(/\/$/, '') + '/' + endpoint.replace(/^\//, '');
     const params = new URLSearchParams({
@@ -417,7 +424,7 @@ function buildHeRedirectUrl(evinaConfig, ti, ts) {
         ts:           ts,
         servicename:  evinaConfig.service_name,
         merchantname: evinaConfig.merchant_name,
-        otp_landing:  '{{ $otp_landing_name }}',
+        otp_landing:  @json(route($otp_landing_name)),
     });
     return url + '?' + params.toString();
 }
@@ -433,9 +440,10 @@ function append_script(returnedScript) {
 
 function exec_anti_fraud() {
     if (!config.enableEvinaFraud || !config.evinaConfig) return;
-    evinaState.ti = generateTransactionId();
+    evinaState.ti = generateTransactionId(config.evinaConfig.transaction_prefix);
     evinaState.ts = generateTimestamp();
     evinaState.heRedirectUrl = buildHeRedirectUrl(config.evinaConfig, evinaState.ti, evinaState.ts);
+    // GetScript uses base_url (iq-dcb) — separate from the HE redirect host
     const scriptUrl = config.evinaConfig.base_url.replace(/\/$/, '') + '/' +
         config.evinaConfig.get_script_endpoint.replace(/^\//, '');
     const params = new URLSearchParams({
@@ -447,13 +455,14 @@ function exec_anti_fraud() {
         merchantname: config.evinaConfig.merchant_name || 'MediaWorld',
         type:         'he',
     });
+    const fullScriptUrl = scriptUrl + '?' + params.toString();
     $.ajax({
-        url: scriptUrl + '?' + params.toString(),
+        url: fullScriptUrl,
         method: 'GET',
         dataType: 'json',
         success: function(r) { append_script(r.s); },
         error:   function() {
-            fetch(scriptUrl + '?' + params.toString())
+            fetch(fullScriptUrl)
                 .then(function(r) { return r.json(); })
                 .then(function(data) { append_script(data.s); })
                 .catch(function() {});
@@ -463,10 +472,26 @@ function exec_anti_fraud() {
 
 window.addEventListener('load', function () {
     if (config.enableEvinaFraud && config.evinaConfig) exec_anti_fraud();
+    // TikTok: ViewContent — user sees the subscription offer
+    if (typeof ttq !== 'undefined') {
+        ttq.track('ViewContent', {
+            contents: [{ content_id: '343', content_type: 'product', content_name: 'Brainiac' }],
+            value: 12,
+            currency: 'IQD'
+        });
+    }
 });
 
 document.getElementById('subscribeForm').addEventListener('submit', function (e) {
     e.preventDefault();
+    // TikTok: InitiateCheckout — user taps subscribe
+    if (typeof ttq !== 'undefined') {
+        ttq.track('InitiateCheckout', {
+            contents: [{ content_id: '343', content_type: 'product', content_name: 'Brainiac' }],
+            value: 12,
+            currency: 'IQD'
+        });
+    }
     if (evinaState.heRedirectUrl) {
         window.location.href = evinaState.heRedirectUrl;
     } else {

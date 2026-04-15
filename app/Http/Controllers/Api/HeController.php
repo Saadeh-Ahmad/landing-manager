@@ -76,8 +76,16 @@ class HeController extends Controller
         // Prepare Evina configuration for frontend
         $evinaConfig = null;
         if ($config['enable_evina_fraud']) {
-            $evinaServiceConfig = config('apis.evina');
-            $baseUrl = \App\Models\SystemConfig::get('endpoints_vas_he.base_url', '');
+            // Evina GetScript host (iq-dcb) — separate from the HE redirect host (iq-duel)
+            $evinaBaseUrl = \App\Models\SystemConfig::get(
+                'endpoints_evina.base_url',
+                config('apis.evina.endpoints.base_url', 'http://www.social-sms.com/iq-dcb')
+            );
+            // VAS HE redirect host (iq-duel)
+            $heBaseUrl = \App\Models\SystemConfig::get(
+                'endpoints_vas_he.base_url',
+                config('apis.vas_operator.he_base_url', 'http://www.social-sms.com/iq-duel')
+            );
             $getScriptEndpoint = \App\Models\SystemConfig::get('endpoints_evina.get_script', '/dcbprotect.php');
             $heRedirectEndpoint = \App\Models\SystemConfig::get(
                 $service->heRedirectConfigKey(),
@@ -85,15 +93,18 @@ class HeController extends Controller
             );
 
             $evinaConfig = [
-                'base_url' => str_replace('https', 'http', $baseUrl),
-                'get_script_endpoint' => $getScriptEndpoint,
+                // Used for Evina GetScript (dcbprotect.php) — always iq-dcb
+                'base_url'             => str_replace('https', 'http', $evinaBaseUrl),
+                // Used for the HE oneclick redirect — always iq-duel
+                'he_base_url'          => str_replace('https', 'http', $heBaseUrl),
+                'get_script_endpoint'  => $getScriptEndpoint,
                 'he_redirect_endpoint' => $heRedirectEndpoint,
-                'merchant_name' => $service->merchant_name ?? 'MediaWorld',
-                'transaction_prefix' => 'MW',
-                'service_name' => $service->display_name,
-                'service_id' => $service->service_id,
-                'sp_id' => $service->sp_id,
-                'shortcode' => $service->shortcode,
+                'merchant_name'        => $service->merchant_name ?? 'MediaWorld',
+                'transaction_prefix'   => 'MW',
+                'service_name'         => $service->display_name,
+                'service_id'           => $service->service_id,
+                'sp_id'                => $service->sp_id,
+                'shortcode'            => $service->shortcode,
             ];
         }
 

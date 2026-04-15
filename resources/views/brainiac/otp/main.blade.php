@@ -29,17 +29,13 @@
         flex-direction: column;
         font-family: 'Cairo', Tahoma, Arial, sans-serif;
         background:
-            url('{{ asset('images/brainiac/math_pattern_v2.svg') }}') repeat,
-            var(--br-gray);
-        background-size: auto, auto;
+        url('{{ asset('images/brainiac/math_pattern_v2.svg') }}') left center / 20% repeat, repeating-linear-gradient(rgb(19, 154, 132), rgb(139, 91, 149), rgb(82, 30, 87) 49.9%, rgb(242, 242, 242) 50.1%, rgb(242, 242, 242) 100%) center center;
+        background-position: left center, center center;
     }
 
     /* ── Top gradient section ── */
     .br-otp-top {
         position: relative;
-        background:
-            url('{{ asset('images/brainiac/math_pattern_v2.svg') }}') no-repeat center right / 20%,
-            repeating-linear-gradient(#002659, #00c4d7 29%, #f2f2f2 50.1%, #f2f2f2 100%);
         padding: 0 0 clamp(28px, 8vw, 60px);
         display: flex;
         flex-direction: column;
@@ -313,7 +309,8 @@
         font-weight: 600;
     }
     .br-otp-footer__sep { color: rgba(255,255,255,.35); }
-    .br-otp-footer a {
+    .br-otp-footer a,
+    .br-otp-footer span:not(.br-otp-footer__brand):not(.br-otp-footer__sep) {
         color: rgba(255,255,255,.85);
         text-decoration: none;
         font-weight: 600;
@@ -336,7 +333,6 @@
             <div class="br-otp-lang">
                 <a href="{{ route('lang.switch', 'ar') }}" class="{{ $isAr ? 'active' : '' }}">عربي</a>
                 <a href="{{ route('lang.switch', 'en') }}" class="{{ $isEn ? 'active' : '' }}">EN</a>
-                <a href="{{ route('lang.switch', 'ku') }}" class="{{ $isKu ? 'active' : '' }}">كردي</a>
             </div>
         </nav>
         <div class="br-otp-logo">
@@ -393,10 +389,10 @@
                     <p class="br-otp-price">
                         @if($isEn)
                             By clicking "Subscribe" you agree to the
-                            <a href="{{ route('terms') }}" style="color:var(--br-pink);text-decoration:none;">Terms &amp; Conditions</a>
+                            <span style="color:var(--br-pink);">Terms &amp; Conditions</span>
                         @else
                             عند النقر على "اشترك" سنقوم بتفعيل اشتراكك
-                            <a href="{{ route('terms') }}" style="color:var(--br-pink);text-decoration:none;">الشروط والأحكام</a>
+                            <span style="color:var(--br-pink);">الشروط والأحكام</span>
                         @endif
                     </p>
                 </form>
@@ -468,13 +464,9 @@
             <strong>Zain IQ</strong>
         </span>
         <span class="br-otp-footer__sep">|</span>
-        <a href="{{ route('terms') }}">
-            @if($isEn) T&Cs @else الشروط والأحكام @endif
-        </a>
+        <span>@if($isEn) T&Cs @else الشروط والأحكام @endif</span>
         <span class="br-otp-footer__sep">|</span>
-        <a href="{{ route('privacy') }}">
-            @if($isEn) Privacy @else سياسة الخصوصية @endif
-        </a>
+        <span>@if($isEn) Privacy @else سياسة الخصوصية @endif</span>
     </footer>
 </div>
 @endsection
@@ -666,8 +658,6 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
             mainBtn.textContent = translations.verify;
             document.getElementById('pincode').value = '';
             document.getElementById('pincode').focus();
-            // Regenerate ti/ts per Evina guide: "If failure, reload with a new ti and ts"
-            if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
         }
     } catch (err) {
         const msg = err.status
@@ -676,8 +666,6 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
         showAlert('otpAlertMessage', msg, 'error');
         mainBtn.disabled = false;
         mainBtn.textContent = translations.verify;
-        // Regenerate ti/ts per Evina guide: "If failure, reload with a new ti and ts"
-        if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
     }
 });
 

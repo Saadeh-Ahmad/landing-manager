@@ -231,7 +231,8 @@
         padding: 14px 12px;
         font-size: 13px;
     }
-    .zain-otp__footer a {
+    .zain-otp__footer a,
+    .zain-otp__footer span {
         color: #fff;
         text-decoration: none;
         margin: 0 14px;
@@ -273,7 +274,6 @@
         <nav class="zain-otp__lang" aria-label="Language">
             <a href="{{ route('lang.switch', 'ar') }}" class="{{ app()->getLocale() === 'ar' ? 'is-active' : '' }}">{{ __('landing.zain.lang_ar') }}</a>
             <a href="{{ route('lang.switch', 'en') }}" class="{{ app()->getLocale() === 'en' ? 'is-active' : '' }}">{{ __('landing.zain.lang_en') }}</a>
-            <a href="{{ route('lang.switch', 'ku') }}" class="{{ app()->getLocale() === 'ku' ? 'is-active' : '' }}">{{ __('landing.zain.lang_ku') }}</a>
         </nav>
     </div>
 
@@ -345,8 +345,8 @@
     </div>
 
     <footer class="zain-otp__footer">
-        <a href="{{ route('terms') }}">{{ __('landing.zain.footer_tc') }}</a>
-        <a href="{{ route('privacy') }}">{{ __('landing.zain.footer_privacy') }}</a>
+        <span>{{ __('landing.zain.footer_tc') }}</span>
+        <span>{{ __('landing.zain.footer_privacy') }}</span>
     </footer>
 </div>
 @endsection
@@ -553,8 +553,6 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
             mainBtn.textContent = translations.verifySubscribe;
             document.getElementById('pincode').value = '';
             document.getElementById('pincode').focus();
-            // Regenerate ti/ts per Evina guide: "If failure, reload with a new ti and ts"
-            if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
         }
     } catch (err) {
         const msg = err.status
@@ -563,8 +561,6 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
         showOtpAlert(msg, 'error');
         mainBtn.disabled = false;
         mainBtn.textContent = translations.verifySubscribe;
-        // Regenerate ti/ts per Evina guide: "If failure, reload with a new ti and ts"
-        if (config.enableEvinaFraud && config.evinaConfig) loadEvinaScript();
     }
 });
 
