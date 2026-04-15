@@ -180,7 +180,7 @@ class DcbService
 
             // Build API URL using ServiceConfig
             $params = [
-                'username' => $service->api_username,
+                'user' => $service->api_username,
                 'password' => $service->api_password,
                 'msisdn' => $msisdn,
                 'pincode' => $pincode,
