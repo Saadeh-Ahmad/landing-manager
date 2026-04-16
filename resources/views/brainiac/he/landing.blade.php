@@ -346,7 +346,7 @@
         <form id="subscribeForm" style="width:min(100%,340px)">
             <input type="hidden" name="service_name" value="{{ $config['service_name'] }}">
             <button type="submit" id="subscribe_btn" class="br-btn br-btn--primary">
-                @if($isEn) REGISTER @else اشترك @endif
+                @if($isEn) SUBSCRIBE @else اشترك @endif
             </button>
         </form>
 
