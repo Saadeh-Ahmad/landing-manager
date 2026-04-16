@@ -100,7 +100,7 @@
     }
     .br-subtitle__header {
         display: block;
-        font-size: clamp(.8rem, 1.8vw, .95rem);
+        font-size: clamp(1rem, 2vw, 1.15rem);
         font-weight: 700;
         letter-spacing: .02em;
         color: rgba(255,255,255,.75);
@@ -109,7 +109,7 @@
     }
     .br-subtitle__body {
         display: block;
-        font-size: clamp(.78rem, 1.7vw, .9rem);
+        font-size: clamp(.9rem, 1.6vw, 1rem);
         font-weight: 400;
         line-height: 1.7;
         color: rgba(255,255,255,.9);
