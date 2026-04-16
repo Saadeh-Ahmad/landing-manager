@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SuccessController;
-use App\Http\Controllers\FailedController;
+use App\Http\Controllers\DuelSuccessController;
+use App\Http\Controllers\DuelFailedController;
+use App\Http\Controllers\BrainiacSuccessController;
+use App\Http\Controllers\BrainiacFailedController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Api\OtpController as ApiOtpController;
 use App\Http\Controllers\Api\HeController as ApiHeController;
@@ -37,10 +39,16 @@ Route::get('/landing/brainiac-he', function () {
 })->name('landing.brainiac-he');
 
 // Subscription Success Page
-Route::get('/duel-success', [SuccessController::class, 'show'])->name('duel.success');
+Route::get('/duel-success', [DuelSuccessController::class, 'show'])->name('duel.success');
 
 // Subscription Failed Page
-Route::get('/duel-failed', [FailedController::class, 'show'])->name('duel.failed');
+Route::get('/duel-failed', [DuelFailedController::class, 'show'])->name('duel.failed');
+
+// Brainiac Subscription Success Page
+Route::get('/brainiac-success', [BrainiacSuccessController::class, 'show'])->name('brainiac.success');
+
+// Brainiac Subscription Failed Page
+Route::get('/brainiac-failed', [BrainiacFailedController::class, 'show'])->name('brainiac.failed');
 
 // Privacy Policy Page
 Route::get('/privacy', function () {

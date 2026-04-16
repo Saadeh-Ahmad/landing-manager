@@ -15,13 +15,17 @@ class LanguageController extends Controller
      */
     public function switch(Request $request, string $locale)
     {
-        // Validate locale
         if (in_array($locale, ['ar', 'en', 'ku'], true)) {
             session(['locale' => $locale]);
             app()->setLocale($locale);
         }
 
-        // Redirect back to the previous page, or home if no referrer
+        // Honor explicit next param (must be a relative path to prevent open redirect)
+        $next = $request->query('next', '');
+        if ($next && str_starts_with($next, '/')) {
+            return redirect($next);
+        }
+
         return redirect()->back()->with('locale_changed', true);
     }
 }

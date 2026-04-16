@@ -600,7 +600,7 @@ document.getElementById('phoneForm').addEventListener('submit', async function (
         const data = await readJsonOrThrow(response);
         if (data.success) {
             if (data.already_subscribed) {
-                window.location.href = @json(route('duel.success', ['already_subscribed' => true]));
+                window.location.href = @json(route('brainiac.success', ['already_subscribed' => true]));
                 return;
             }
             showAlert('alertMessage', @json($isEn ? 'We sent a code to your phone.' : 'أرسلنا رمزًا إلى هاتفك.'), 'success');
@@ -651,7 +651,7 @@ document.getElementById('otpForm').addEventListener('submit', async function (e)
         const data = await readJsonOrThrow(response);
         if (data.success) {
             showAlert('otpAlertMessage', @json($isEn ? 'Subscribed successfully!' : 'تم الاشتراك بنجاح!'), 'success');
-            setTimeout(() => { window.location.href = @json(route('duel.success')); }, 1200);
+            setTimeout(() => { window.location.href = @json(route('brainiac.success')); }, 1200);
         } else {
             showAlert('otpAlertMessage', data.message || 'Invalid code', 'error');
             mainBtn.disabled = false;
