@@ -331,8 +331,9 @@
     <div class="br-otp-top">
         <nav class="br-otp-nav" aria-label="{{ $isAr ? 'اللغة' : 'Language' }}">
             <div class="br-otp-lang">
-                <a href="{{ route('lang.switch', 'ar') }}" class="{{ $isAr ? 'active' : '' }}">عربي</a>
-                <a href="{{ route('lang.switch', 'en') }}" class="{{ $isEn ? 'active' : '' }}">EN</a>
+                @php $currentPath = '/' . request()->path(); @endphp
+                <a href="{{ route('lang.switch', 'ar') }}?next={{ urlencode($currentPath) }}" class="{{ $isAr ? 'active' : '' }}">عربي</a>
+                <a href="{{ route('lang.switch', 'en') }}?next={{ urlencode($currentPath) }}" class="{{ $isEn ? 'active' : '' }}">EN</a>
             </div>
         </nav>
         <div class="br-otp-logo">

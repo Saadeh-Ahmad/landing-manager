@@ -15,6 +15,8 @@ class DuelSuccessController extends SuccessController
         $servicename = $request->query('servicename');
         $ti          = $request->query('ti');
 
+        app()->setLocale(session('locale', 'ar') ?: 'ar');
+
         Log::info('Duel success page accessed', [
             'msisdn'      => $msisdn,
             'success'     => $success,

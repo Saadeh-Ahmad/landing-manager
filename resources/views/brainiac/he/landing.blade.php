@@ -282,8 +282,9 @@
     <div class="br-top">
         <nav class="br-nav" aria-label="{{ $isAr ? 'اللغة' : 'Language' }}">
             <div class="br-lang">
-                <a href="{{ route('lang.switch', 'ar') }}" class="{{ $isAr ? 'active' : '' }}">عربي</a>
-                <a href="{{ route('lang.switch', 'en') }}" class="{{ $isEn ? 'active' : '' }}">EN</a>
+                @php $currentPath = '/' . request()->path(); @endphp
+                <a href="{{ route('lang.switch', 'ar') }}?next={{ urlencode($currentPath) }}" class="{{ $isAr ? 'active' : '' }}">عربي</a>
+                <a href="{{ route('lang.switch', 'en') }}?next={{ urlencode($currentPath) }}" class="{{ $isEn ? 'active' : '' }}">EN</a>
             </div>
         </nav>
 

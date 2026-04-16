@@ -15,6 +15,8 @@ class BrainiacSuccessController extends SuccessController
         $servicename = $request->query('servicename');
         $ti         = $request->query('ti');
 
+        app()->setLocale(session('locale', 'ar') ?: 'ar');
+
         Log::info('Brainiac success page accessed', [
             'msisdn'      => $msisdn,
             'success'     => $success,

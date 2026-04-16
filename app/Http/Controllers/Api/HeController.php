@@ -32,9 +32,9 @@ class HeController extends Controller
      */
     public function showLanding(Request $request, string $serviceName, string $landingName = 'he.landing', string $otpLandingName = 'landing.duel-otp')
     {
-        // Set locale from session, default to Arabic
-        $locale = session('locale', 'ar');
-        app()->setLocale($locale);
+        // Always default to Arabic on HE landing
+        session(['locale' => 'ar']);
+        app()->setLocale('ar');
 
         Log::info("HE Landing accessed", [
             'service' => $serviceName,
@@ -42,7 +42,6 @@ class HeController extends Controller
             'method' => $request->method(),
             'secure' => $request->secure(),
             'x_forwarded_proto' => $request->header('X-Forwarded-Proto'),
-            'locale' => $locale,
         ]);
 
         // Force HTTP for HE subscription (required for Header Enrichment to work)

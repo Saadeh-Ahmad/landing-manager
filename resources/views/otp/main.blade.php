@@ -272,8 +272,9 @@
 <div class="zain-otp">
     <div class="zain-otp__top">
         <nav class="zain-otp__lang" aria-label="Language">
-            <a href="{{ route('lang.switch', 'ar') }}" class="{{ app()->getLocale() === 'ar' ? 'is-active' : '' }}">{{ __('landing.zain.lang_ar') }}</a>
-            <a href="{{ route('lang.switch', 'en') }}" class="{{ app()->getLocale() === 'en' ? 'is-active' : '' }}">{{ __('landing.zain.lang_en') }}</a>
+            @php $currentPath = '/' . request()->path(); @endphp
+            <a href="{{ route('lang.switch', 'ar') }}?next={{ urlencode($currentPath) }}" class="{{ app()->getLocale() === 'ar' ? 'is-active' : '' }}">{{ __('landing.zain.lang_ar') }}</a>
+            <a href="{{ route('lang.switch', 'en') }}?next={{ urlencode($currentPath) }}" class="{{ app()->getLocale() === 'en' ? 'is-active' : '' }}">{{ __('landing.zain.lang_en') }}</a>
         </nav>
     </div>
 
