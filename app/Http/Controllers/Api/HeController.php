@@ -32,9 +32,11 @@ class HeController extends Controller
      */
     public function showLanding(Request $request, string $serviceName, string $landingName = 'he.landing', string $otpLandingName = 'landing.duel-otp')
     {
-        // Always default to Arabic on HE landing
-        session(['locale' => 'ar']);
-        app()->setLocale('ar');
+        // Default to Arabic only on first visit; preserve user's chosen language afterwards
+        if (!session()->has('locale')) {
+            session(['locale' => 'ar']);
+        }
+        app()->setLocale(session('locale', 'ar'));
 
         Log::info("HE Landing accessed", [
             'service' => $serviceName,

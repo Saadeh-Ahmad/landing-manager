@@ -90,15 +90,30 @@
         filter: drop-shadow(0 4px 14px rgba(0,0,0,.35));
     }
 
-    /* ── Subtitle ── */
+    /* ── Subtitle / Description ── */
     .br-subtitle {
         text-align: center;
         color: #fff;
-        font-size: clamp(.85rem, 2.2vw, 1.1rem);
-        font-weight: 600;
+        padding: 0 clamp(16px, 5vw, 48px) clamp(16px, 3vw, 28px);
+        max-width: 680px;
+        margin: 0 auto;
+    }
+    .br-subtitle__header {
+        display: block;
+        font-size: clamp(.8rem, 1.8vw, .95rem);
+        font-weight: 700;
         letter-spacing: .02em;
-        padding: 0 20px clamp(16px, 3vw, 28px);
-        text-shadow: 0 1px 8px rgba(0,0,0,.3);
+        color: rgba(255,255,255,.75);
+        margin-bottom: 6px;
+        text-shadow: 0 1px 6px rgba(0,0,0,.3);
+    }
+    .br-subtitle__body {
+        display: block;
+        font-size: clamp(.78rem, 1.7vw, .9rem);
+        font-weight: 400;
+        line-height: 1.7;
+        color: rgba(255,255,255,.9);
+        text-shadow: 0 1px 6px rgba(0,0,0,.25);
     }
 
     /* ── Prize cards row ── */
@@ -294,11 +309,11 @@
 
         <p class="br-subtitle">
             @if($isEn)
-                Test your cognitive skills and win amazing prizes!
-            @elseif($isKu)
-                هونەری مەعریفەتت بتەست بکە و خەڵاتی سەرسوڕهێنەر بباتەوە!
+                <span class="br-subtitle__header">By clicking on Subscribe, you agree to the below terms and conditions:</span>
+                <span class="br-subtitle__body">Welcome to the Brainiac competition from Zain. Continue and activate your 1 day free trial now. Play now and increase your points to win amazing prizes with only 300 IQD/day after the end of your free trial. To continue, click on the &ldquo;Subscribe&rdquo; button. You can unsubscribe at any time by sending 0 to 2222.</span>
             @else
-                اختبر معرفتك وفوز بجوائز رائعة!
+                <span class="br-subtitle__header">بالنقر على &ldquo;اشترك&rdquo;، أنت توافق على الشروط والأحكام التالية:</span>
+                <span class="br-subtitle__body">أهلا بك في مسابقة &ldquo;لغز الملايين&rdquo; من زين! تابع وقم بتفعيل الفترة التجريبية المجانية ليوم واحد الآن. العب الآن وقم بزيادة نقاطك للفوز بجوائز مذهلة بتكلفة 300 د.ع/اليوم فقط بعد انتهاء الفترة التجريبية المجانية. للمتابعة، انقر على &ldquo;اشترك&rdquo;. يمكنك إلغاء الاشتراك في أي وقت بإرسال 0 إلى 2222.</span>
             @endif
         </p>
 

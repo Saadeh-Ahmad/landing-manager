@@ -36,10 +36,11 @@ class OtpController extends Controller
             abort(404, 'Service not found or inactive');
         }
 
-        // Always default to Arabic on landing; flush any stale session state
+        // Preserve user's chosen language, default to Arabic on first visit
+        $locale = session('locale', 'ar');
         session()->flush();
-        session(['locale' => 'ar']);
-        app()->setLocale('ar');
+        session(['locale' => $locale]);
+        app()->setLocale($locale);
 
         // Get campaign from request or default
         $campaign = $request->query('campaign', 'campaign1');

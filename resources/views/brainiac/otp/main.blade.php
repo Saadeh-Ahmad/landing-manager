@@ -477,7 +477,7 @@
 <script>
 const translations = {
     subscribe:  @json($isEn ? 'SUBSCRIBE' : 'اشترك'),
-    verify:     @json($isEn ? 'VERIFY & SUBSCRIBE' : 'تحقق والاشتراك'),
+    verify:     @json($isEn ? 'CONFIRM' : 'تأكيد'),
     sending:    @json($isEn ? 'Sending...' : 'جاري الإرسال...'),
     verifying:  @json($isEn ? 'Verifying...' : 'جاري التحقق...'),
 };

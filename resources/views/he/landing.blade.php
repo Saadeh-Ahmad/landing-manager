@@ -273,6 +273,29 @@
         filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.55));
         margin-bottom: 16px;
     }
+    .zain-he__desc {
+        position: relative;
+        z-index: 2;
+        margin-bottom: 14px;
+        max-width: 380px;
+        text-align: center;
+        padding: 0 8px;
+    }
+    .zain-he__desc-intro {
+        font-size: clamp(0.82rem, 1.6vw, 0.95rem);
+        font-weight: 700;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.95);
+        margin-bottom: 8px;
+    }
+    .zain-he__desc-intro span { display: block; }
+    .zain-he__desc-intro span:first-child { color: var(--zain-he-teal); }
+    .zain-he__desc-body {
+        font-size: clamp(0.72rem, 1.3vw, 0.82rem);
+        font-weight: 400;
+        line-height: 1.65;
+        color: rgba(255, 255, 255, 0.72);
+    }
     .zain-he__cta-wrap { position: relative; z-index: 2; }
     .zain-he__cta {
         appearance: none;
@@ -386,8 +409,6 @@
             @if($isEn)
                 <span class="zain-he__hl1">{{ __('landing.zain.he.headline_l1') }}</span>
                 <span class="zain-he__hl2">{{ __('landing.zain.he.headline_l2') }}</span>
-            @elseif(app()->getLocale() === 'ku')
-                {{ trans('landing.zain.he.headline_full', [], 'ar') }}
             @else
                 {{ __('landing.zain.he.headline_full') }}
             @endif
@@ -404,6 +425,13 @@
             <div class="zain-he__mandala" aria-hidden="true"></div>
             <div class="zain-he__right-bg" aria-hidden="true"></div>
             <img class="zain-he__prize-img" src="{{ asset('images/zainiqduel/Get-Started_prizes_lossy.png') }}" alt="" width="592" height="287" loading="eager">
+            <div class="zain-he__desc" @if(!$isEn) dir="rtl" @endif>
+                <p class="zain-he__desc-intro">
+                    <span>{{ __('landing.zain.he.desc_line1') }}</span>
+                    <span>{{ __('landing.zain.he.desc_line2') }}</span>
+                </p>
+                <p class="zain-he__desc-body">{{ __('landing.zain.he.desc_body') }}</p>
+            </div>
             <div class="zain-he__cta-wrap">
                 <form id="subscribeForm">
                     <input type="hidden" name="service_name" value="{{ $config['service_name'] }}">
