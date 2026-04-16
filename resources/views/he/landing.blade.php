@@ -282,7 +282,7 @@
         padding: 0 8px;
     }
     .zain-he__desc-intro {
-        font-size: clamp(0.82rem, 1.6vw, 0.95rem);
+        font-size: clamp(1rem, 2vw, 1.15rem);
         font-weight: 700;
         line-height: 1.5;
         color: rgba(255, 255, 255, 0.95);
@@ -291,9 +291,9 @@
     .zain-he__desc-intro span { display: block; }
     .zain-he__desc-intro span:first-child { color: var(--zain-he-teal); }
     .zain-he__desc-body {
-        font-size: clamp(0.72rem, 1.3vw, 0.82rem);
-        font-weight: 400;
-        line-height: 1.65;
+        font-size: clamp(0.9rem, 1.6vw, 1rem);
+        font-weight: 600;
+        line-height: 1.7;
         color: rgba(255, 255, 255, 0.72);
     }
     .zain-he__cta-wrap { position: relative; z-index: 2; }
