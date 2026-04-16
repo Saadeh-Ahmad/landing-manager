@@ -29,7 +29,7 @@
         --br-gray:  #f2f2f2;
     }
     *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
+    html, body { margin: 0; padding: 0; overflow-x: hidden; overflow-y: auto; }
 
     /* ── Full-page shell ── */
     .br-page {
@@ -267,8 +267,10 @@
     .br-footer a:hover { text-decoration: underline; }
 
     @media (max-width: 480px) {
-        .br-prizes { gap: 10px; }
-        .br-prize-card { width: clamp(120px, 42vw, 170px); padding: 10px 10px 12px; }
+        .br-prizes { gap: 8px; padding: 0 12px; }
+        .br-prize-card { width: clamp(110px, 40vw, 160px); padding: 8px 8px 10px; }
+        .br-prize-card img { height: clamp(60px, 18vw, 90px); }
+        .br-logo-wrap img { height: clamp(44px, 12vw, 68px); }
     }
 </style>
 @endpush

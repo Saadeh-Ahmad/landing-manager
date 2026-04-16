@@ -30,13 +30,24 @@
         --zain-he-teal: #00bcd4;
         --zain-he-green: #4caf50;
     }
-    /* HE only: no vertical page scroll — shell fits the viewport */
-    html:has(.zain-he),
-    body.zainiqduel-body:has(.zain-he) {
-        height: 100%;
-        margin: 0;
-        overflow: hidden;
-        overscroll-behavior: none;
+    /* HE only: no vertical page scroll on desktop — shell fits the viewport */
+    @media (min-width: 769px) {
+        html:has(.zain-he),
+        body.zainiqduel-body:has(.zain-he) {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            overscroll-behavior: none;
+        }
+    }
+    @media (max-width: 768px) {
+        html:has(.zain-he),
+        body.zainiqduel-body:has(.zain-he) {
+            height: auto;
+            margin: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
     }
     .zainiqduel-body { margin: 0; }
     .zain-he {
@@ -52,10 +63,12 @@
         background: url('{{ asset('images/zainiqduel/get_started_bg.jpg') }}') center center / cover no-repeat;
         overflow: hidden;
     }
-    @supports (height: 100dvh) {
-        .zain-he {
-            height: 100dvh;
-            max-height: 100dvh;
+    @media (min-width: 769px) {
+        @supports (height: 100dvh) {
+            .zain-he {
+                height: 100dvh;
+                max-height: 100dvh;
+            }
         }
     }
     .zain-he--en-font .zain-he__headline h1 {
@@ -321,9 +334,17 @@
     }
 
     @media (max-width: 768px) {
+        .zain-he {
+            height: auto;
+            min-height: 100vh;
+            max-height: none;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
         .zain-he__row {
             flex-direction: column;
-            padding-bottom: clamp(40px, 10vh, 72px);
+            padding-bottom: clamp(24px, 6vh, 48px);
+            overflow: visible;
         }
         .zain-he__visual,
         .zain-he__right {
@@ -332,16 +353,16 @@
         }
         .zain-he__visual-stage {
             width: 100%;
-            max-width: min(96vw, 520px);
-            max-height: min(52vh, 520px);
+            max-width: min(80vw, 320px);
+            max-height: min(30vh, 280px);
         }
         .zain-he__visual img {
-            max-height: min(48vh, 480px);
+            max-height: min(28vh, 260px);
             width: 100%;
         }
         .zain-he__prize-img {
-            width: min(100%, min(96vw, 640px));
-            max-height: min(34vh, 360px);
+            width: min(100%, min(80vw, 340px));
+            max-height: min(24vh, 200px);
             margin-bottom: 10px;
         }
         [dir="rtl"] .zain-he__top { justify-content: center; }
