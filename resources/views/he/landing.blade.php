@@ -406,12 +406,7 @@
 
     <div class="zain-he__headline">
         <h1>
-            @if($isEn)
-                <span class="zain-he__hl1">{{ __('landing.zain.he.headline_l1') }}</span>
-                <span class="zain-he__hl2">{{ __('landing.zain.he.headline_l2') }}</span>
-            @else
-                {{ __('landing.zain.he.headline_full') }}
-            @endif
+            {{ __('landing.zain.he.headline_full') }}
         </h1>
     </div>
 
