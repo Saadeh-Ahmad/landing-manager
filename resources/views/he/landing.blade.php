@@ -310,7 +310,7 @@
     }
     .zain-he__ribbon img {
         display: block;
-        width: clamp(168px, 36vmin, 275px);
+        width: clamp(130px, 36vmin, 200px);
         height: auto;
     }
     [dir="rtl"] .zain-he__ribbon {
@@ -338,7 +338,7 @@
     @media (max-width: 768px) {
         .zain-he__row {
             flex-direction: column;
-            padding-bottom: clamp(24px, 0vh, 48px);
+            padding-bottom: clamp(24px, 0vh, 30px);
             overflow: visible;
         }
         .zain-he__visual,
