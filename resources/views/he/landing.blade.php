@@ -301,7 +301,6 @@
 
     /* https://www.zainiqduel.com/ext/skin/free-trial-stripe_AR.png (+ EN variant) */
     .zain-he__ribbon {
-        position: fixed;
         z-index: 30;
         right: max(-12px, -1.5vmin);
         bottom: clamp(40px, 7vh, 72px);
@@ -339,7 +338,7 @@
     @media (max-width: 768px) {
         .zain-he__row {
             flex-direction: column;
-            padding-bottom: clamp(24px, 6vh, 48px);
+            padding-bottom: clamp(24px, 0vh, 48px);
             overflow: visible;
         }
         .zain-he__visual,
