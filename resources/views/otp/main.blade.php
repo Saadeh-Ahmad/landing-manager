@@ -11,6 +11,7 @@
         --zain-otp-pink: #e91e63;
         --zain-otp-pink-dark: #c2185b;
     }
+    html, body { margin: 0; padding: 0; overflow-x: hidden; overflow-y: auto; }
     .zainiqduel-body { margin: 0; background: var(--zain-otp-bg); }
     .zain-otp {
         min-height: 100vh;
