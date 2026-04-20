@@ -30,46 +30,28 @@
         --zain-he-teal: #00bcd4;
         --zain-he-green: #4caf50;
     }
-    /* HE only: no vertical page scroll on desktop — shell fits the viewport */
-    @media (min-width: 769px) {
-        html:has(.zain-he),
-        body.zainiqduel-body:has(.zain-he) {
-            height: 100%;
-            margin: 0;
-            overflow: hidden;
-            overscroll-behavior: none;
-        }
-    }
-    @media (max-width: 768px) {
-        html:has(.zain-he),
-        body.zainiqduel-body:has(.zain-he) {
-            height: auto;
-            margin: 0;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
+    html:has(.zain-he),
+    body.zainiqduel-body:has(.zain-he) {
+        margin: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
     .zainiqduel-body { margin: 0; }
     .zain-he {
         position: relative;
         box-sizing: border-box;
-        height: 100vh;
-        max-height: 100vh;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         font-family: 'Cairo', Tahoma, Arial, sans-serif;
         color: #fff;
         /* get_started_bg.jpg — refresh from zainiqduel static/skins/skin_13/images/ */
         background: url('{{ asset('images/zainiqduel/get_started_bg.jpg') }}') center center / cover no-repeat;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
-    @media (min-width: 769px) {
-        @supports (height: 100dvh) {
-            .zain-he {
-                height: 100dvh;
-                max-height: 100dvh;
-            }
-        }
+    @supports (min-height: 100dvh) {
+        .zain-he { min-height: 100dvh; }
     }
     .zain-he--en-font .zain-he__headline h1 {
         font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
@@ -143,7 +125,6 @@
         position: relative;
         z-index: 3;
         flex: 1 1 auto;
-        min-height: 0;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -156,7 +137,7 @@
         box-sizing: border-box;
         direction: ltr;
         unicode-bidi: isolate;
-        overflow: hidden;
+        overflow: visible;
     }
     .zain-he__visual {
         flex: 1 1 0;
@@ -231,7 +212,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-height: 0;
         padding: 8px 0;
     }
     /* Large faint mandala behind cash */
@@ -357,13 +337,6 @@
     }
 
     @media (max-width: 768px) {
-        .zain-he {
-            height: auto;
-            min-height: 100vh;
-            max-height: none;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
         .zain-he__row {
             flex-direction: column;
             padding-bottom: clamp(24px, 6vh, 48px);
