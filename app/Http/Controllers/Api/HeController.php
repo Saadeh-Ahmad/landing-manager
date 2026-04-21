@@ -32,6 +32,8 @@ class HeController extends Controller
      */
     public function showLanding(Request $request, string $serviceName, string $landingName = 'he.landing', string $otpLandingName = 'landing.duel-otp')
     {
+        $this->applyLocaleFromQuery($request);
+
         // Default to Arabic only on first visit; preserve user's chosen language afterwards
         if (!session()->has('locale')) {
             session(['locale' => 'ar']);
@@ -119,6 +121,15 @@ class HeController extends Controller
             'evina_config' => $evinaConfig,
             'otp_landing_name' => $otpLandingName,
         ]);
+    }
+
+    protected function applyLocaleFromQuery(Request $request): void
+    {
+        $locale = $request->query('lang');
+        if (in_array($locale, ['ar', 'en', 'ku'], true)) {
+            session(['locale' => $locale]);
+            app()->setLocale($locale);
+        }
     }
 }
 
