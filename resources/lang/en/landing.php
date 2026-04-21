@@ -63,6 +63,23 @@ return [
             'desc_line2' => 'Activate your FREE 1 day trial period',
             'desc_body' => 'Play against others and Win amazing prizes with only IQD 240/day after free period ends. To continue, click on "Subscribe" button. You may cancel the service any time by sending "stop" to 2600.',
         ],
+        'banner' => [
+            'headline_full' => '!Beat your quiz rivals and win awesome prizes',
+            'cta' => 'SUBSCRIBE',
+            'desc_line1' => "Welcome to Zain's quiz challenge.",
+            'desc_line2' => 'Enjoy your FREE 1-day trial.',
+            'desc_body' => 'Play against others in exciting quiz rounds and win rewards with every challenge. Continue by tapping subscribe.',
+        ],
+        'brainiac_banner' => [
+            'terms_body' => 'Welcome to the Brainiac competition from Zain. Continue and activate your 1 day free trial now. Play now and increase your points to win amazing prizes with only 300 IQD/day after the end of your free trial.',
+            'weekly_label' => 'Weekly Prize',
+            'weekly_sub' => 'iPhone 17 Pro Max',
+            'grand_label' => 'Grand Prize',
+            'grand_sub' => 'IQD 200,000,000 in Cash',
+            'cta' => 'SUBSCRIBE',
+            'login' => 'LOGIN',
+            'note' => 'Earn points to win valuable prizes such as the Grand Prize of IQD 200,000,000 in Cash!',
+        ],
         'otp' => [
             'step_title' => 'Activate your free trial in 2 easy steps',
             'step2_title' => 'Enter your validation code',

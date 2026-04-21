@@ -28,6 +28,11 @@ Route::get('/landing/duel-he', function () {
     return app(ApiHeController::class)->showLanding(request(), 'duel-he', 'he.landing', 'landing.duel-otp');
 })->name('landing.duel-he');
 
+// Static HE banner landing (no backend logic)
+Route::get('/landing/duel', function () {
+    return view('he.banner');
+})->name('landing.duel');
+
 // Static OTP Landing — Brainiac
 Route::get('/landing/brainiac-otp', function () {
     return app(ApiOtpController::class)->showLanding(request(), 'brainiac-otp', 'brainiac.otp.main');
@@ -37,6 +42,11 @@ Route::get('/landing/brainiac-otp', function () {
 Route::get('/landing/brainiac-he', function () {
     return app(ApiHeController::class)->showLanding(request(), 'brainiac-he', 'brainiac.he.landing', 'landing.brainiac-otp');
 })->name('landing.brainiac-he');
+
+// Static HE banner landing for Brainiac (no backend logic)
+Route::get('/landing/brainiac', function () {
+    return view('brainiac.he.banner');
+})->name('landing.  ');
 
 // Subscription Success Page
 Route::get('/duel-success', [DuelSuccessController::class, 'show'])->name('duel.success');
