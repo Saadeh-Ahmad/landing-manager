@@ -68,7 +68,7 @@ return [
             'cta' => 'SUBSCRIBE',
             'desc_line1' => "Welcome to Zain's quiz challenge.",
             'desc_line2' => 'Enjoy your FREE 1-day trial.',
-            'desc_body' => 'Play against others in exciting quiz rounds and win rewards with every challenge. Continue by tapping subscribe.',
+            'desc_body' => 'Play against others in exciting quiz rounds and win rewards with every challenge. Subscription is only IQD 240/day after the free period. Continue by tapping subscribe.',
         ],
         'brainiac_banner' => [
             'terms_body' => 'Welcome to the Brainiac competition from Zain. Continue and activate your 1 day free trial now. Play now and increase your points to win amazing prizes with only 300 IQD/day after the end of your free trial.',
