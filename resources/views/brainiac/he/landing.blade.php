@@ -320,7 +320,7 @@
         <div class="br-prizes">
             {{-- Grand Prize --}}
             <div class="br-prize-card">
-                
+
             <img src="{{ asset('images/brainiac/prize_weekly.png') }}" alt="" width="200" height="130" loading="eager">
                 <div class="br-prize-card__label">
                     @if($isEn) Weekly Prize @else جائزة أسبوعية @endif
@@ -349,10 +349,6 @@
                 @if($isEn) SUBSCRIBE @else اشترك @endif
             </button>
         </form>
-
-        <a href="{{ route('landing.brainiac-otp') }}" class="br-btn br-btn--outline">
-            @if($isEn) LOGIN @else تسجيل الدخول @endif
-        </a>
 
         <p class="br-desc">
             @if($isEn)
